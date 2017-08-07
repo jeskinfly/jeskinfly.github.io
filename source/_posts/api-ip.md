@@ -162,6 +162,6 @@ dat文件解压为txt查看内容
 
 ```
 每行三个字段，start, end, address，从start到end之间的IP都是address这个位置。因为end跟下一个start是连接的，所以只需要记录start: address就好了，可通过查找“小于等于给定IP的最大值”来获取地址。
-[参考链接](http://www.cnblogs.com/anpengapple/p/5384985.html)
+**参考链接 :**[解析纯真IP地址库](http://www.cnblogs.com/anpengapple/p/5384985.html)
 
 注：如果每一条ip对应一个address ，把所有ip的address写成一个列表？那么服务器得有200G来存放。
