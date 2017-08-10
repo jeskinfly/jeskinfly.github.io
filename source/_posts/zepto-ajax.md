@@ -274,4 +274,10 @@ $.ajax = function(options){
 ```javascript
 $.ajaxSettings.headers = {'name' : 'value' };
 ```
+或者：
+```javascript
+$.ajaxSettings = $.extend($.ajaxSettings, {
+    headers: {'name' : 'value' };
+});
+```
 
