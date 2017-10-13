@@ -2,14 +2,14 @@
 title: github如何同步fork？
 date: 2017-10-13 11:25:07
 tags:
-- github
+- Github
 ---
 
 ### 为 `fork` 配置远程 `upstream`仓库
 
 - 列出当前远程仓库配置.
 
-```
+```bash
 $ git remote -v
 origin  https://github.com/YOUR_USERNAME/YOUR_FORK.git (fetch)
 origin  https://github.com/YOUR_USERNAME/YOUR_FORK.git (push)
@@ -19,13 +19,13 @@ origin  https://github.com/YOUR_USERNAME/YOUR_FORK.git (push)
 
 - 新增要同步的 远程 `upstream` 仓库.
 
-```
+```bash
 $ git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
 ```
 
 - 验证，为`fork`添加 `upstream`仓库是否成功.
 
-```
+```bash
 $ git remote -v
 origin    https://github.com/YOUR_USERNAME/YOUR_FORK.git (fetch)
 origin    https://github.com/YOUR_USERNAME/YOUR_FORK.git (push)
@@ -39,7 +39,7 @@ upstream  https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git (push)
 
 - 从远程`upstream` 仓库获取所有分支的更新文件和提交历史信息到本地目录
 
-```
+```bash
 $ git fetch upstream
 remote: Counting objects: 75, done.
 remote: Compressing objects: 100% (53/53), done.
@@ -51,14 +51,14 @@ From https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY
 
 - 确保你在本地的 `master` 分支
 
-```
+```bash
 $ git checkout master
 Switched to branch 'master'
 ```
 
 - 分支合并
 
-```
+```bash
 $ git merge upstream/master
 Updating a422352..5fdff0f
 Fast-forward
