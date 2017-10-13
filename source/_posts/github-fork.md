@@ -15,6 +15,8 @@ origin  https://github.com/YOUR_USERNAME/YOUR_FORK.git (fetch)
 origin  https://github.com/YOUR_USERNAME/YOUR_FORK.git (push)
 ```
 
+<!-- more -->
+
 - 新增要同步的 远程 `upstream` 仓库.
 
 ```
