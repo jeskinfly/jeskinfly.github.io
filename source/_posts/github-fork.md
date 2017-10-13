@@ -3,6 +3,9 @@ title: github如何同步fork？
 date: 2017-10-13 11:25:07
 tags:
 - Github
+categories:
+- Github
+- fork
 ---
 
 ### 为 `fork` 配置远程 `upstream`仓库

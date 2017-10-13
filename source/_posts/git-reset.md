@@ -5,6 +5,7 @@ tags:
 - Git命令
 categories:
 - Git
+- reset
 ---
 
 

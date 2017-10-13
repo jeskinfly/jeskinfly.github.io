@@ -3,6 +3,9 @@ title: 程序如何支持emoji表情？
 date: 2017-10-09 11:18:25
 tags: 
 - emoji
+categories:
+- PHP
+- emoji
 ---
 ### Unicode简述
 　　Unicode（中文：万国码、国际码、统一码、单一码）：把世界上所有语言的文字和所有的符号（如高音谱号、麻将、emoji）用同一套编码表示出来。
