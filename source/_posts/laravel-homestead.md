@@ -112,3 +112,19 @@ config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true
 - 下载安装 `Cygwin` 或 `MinGW` ，然后查找出 `rsync` 安装。
 - 把 `rsync.exe` 的路径加入 windows的 `path` 环境。
 - 执行 `vagrant reload` ，现在可以享受 windows下的vbox极速共享目录了。
+
+
+### 自定义虚拟机的名称
+```ruby
+ config.vm.provider "virtualbox" do |vb|
+  # add a line
+  # Define this vm's name
+      vb.name = "centos_7"   # 自定义在虚拟机中显示的名称
+  #   # Display the VirtualBox GUI when booting the machine
+
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+  end
+```
