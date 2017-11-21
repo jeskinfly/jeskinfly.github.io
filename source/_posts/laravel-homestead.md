@@ -88,7 +88,7 @@ Bringing machine 'homestead-7' up with 'virtualbox' provider...
 C:/HashiCorp/Vagrant/embedded/gems/gems/vagrant-1.9.3/lib/vagrant/util/is_port_open.rb:21:in `initialize': The requested address is not valid in its context. - connect(2) for "0.0.0.0" port 8000 (Errno::EADDRNOTAVAIL)
 ```
 默认会绑定所有IP就是提示里面的 `0.0.0.0` ，改成只是我本地和虚拟机的转发。
-修改文件 `./scripts/homestead.rb` 的网络配置
+#### 对于Laravel的HomeStead，修改文件 `./scripts/homestead.rb` 的网络配置
 ```ruby
         # Use Default Port Forwarding Unless Overridden
         unless settings.has_key?("default_ports") && settings["default_ports"] == false
@@ -102,6 +102,12 @@ C:/HashiCorp/Vagrant/embedded/gems/gems/vagrant-1.9.3/lib/vagrant/util/is_port_o
             end
         end
 ```
+#### 对于CentOS，修改Vagrantfile文件
+```
+# config.vm.network "forwarded_port", guest: 80, host: 8888
+config.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1", protcol: "tcp"
+```
+其他端口转发，可举一反三。
 
 ### 同步读取慢 
 window7 下使用`rsync`，解决`vagrant` 共享目录读取速度慢的问题，采用的是一次性单向同步。
