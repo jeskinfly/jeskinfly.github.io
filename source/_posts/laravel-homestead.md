@@ -109,17 +109,6 @@ config.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1",
 ```
 其他端口转发，可举一反三。
 
-### 同步读取慢 
-window7 下使用`rsync`，解决`vagrant` 共享目录读取速度慢的问题，采用的是一次性单向同步。
-在 `Vagrantfile` 文件中设置同步目录为 `rsync`
-``` ruby
-config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true
-```
-- 下载安装 `Cygwin` 或 `MinGW` ，然后查找出 `rsync` 安装。
-- 把 `rsync.exe` 的路径加入 windows的 `path` 环境。
-- 执行 `vagrant reload` ，现在可以享受 windows下的vbox极速共享目录了。
-
-
 ### 自定义虚拟机的名称
 ```ruby
  config.vm.provider "virtualbox" do |vb|
@@ -134,3 +123,38 @@ config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true
   #   vb.memory = "1024"
   end
 ```
+
+### 同步读取慢（不建议） 
+`Vagrant` 默认通过 `vagrantfile` 执行同步，并可以很好的执行。但是如果不满意同步的速度，`windows` 可以也使用 `rsync`，但是不建议。
+window7 下使用`rsync`，可解决`vagrant` 共享目录读取速度慢的问题，采用的是一次性单向同步，只在执行 `vagrant up` 或 `vagrant reload`时同步一次。
+修改宿主机上的文件后，可以结合 `vagrant  rsync` and `vagrant rsync-auto`可以手动同步。
+在 `Vagrantfile` 文件中设置同步目录为 `rsync`
+``` ruby
+config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true
+```
+- 下载安装 `Cygwin` 或 `MinGW` ，然后查找出 `rsync` 安装。
+- 把 `rsync.exe` 的路径加入 windows的 `path` 环境。
+- 执行 `vagrant reload` ，现在可以享受 windows下的vbox极速共享目录了。
+
+### FTP或SFTP提交代码到FTP服务器
+配置虚拟机，在`vagrantfile`中添加如下内容
+```
+config.push.define "ftp" do |push|
+  # host:port，端口可以省略，默认端口 22
+  push.host = "ftp.company.com"
+  push.username = "username"
+  push.password = "password"
+  # true：SFTP；false：FTP。默认false。
+  push.secure = false 
+  # 指定通过(S)FTP上传文件到哪个目录（默认为 / ）。
+  push.destination = '/'
+  # 排除的文件,可以多次配置,push.dir的相对路径
+  push.exclude = 'exclude.file.1'
+  push.exclude = 'exclude.file.2'
+  push.exclude = 'exclude.file.*'
+  # 把虚拟机哪个目录上传上去,默认虚拟机中Vagrantfile所在的目录。
+  # 如: 通过Box安装的CentOS和HomeStead中，Vagrantfile所在的目录为/vagrant;
+  push.dir = '/src'
+end
+```
+然后执行 `vagrant push`。
