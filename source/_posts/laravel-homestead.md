@@ -13,13 +13,13 @@ categories:
 
 ---
 
-### 网络问题
-国内因为网络的原因，默认的盒子安装命令 `vagrant box add laravel/homestead` 变得不适用。**可以先下载到本地后通过本地安装**。
+### 安装时网络问题
+　　国内因为网络的原因，默认的盒子安装命令 `vagrant box add laravel/homestead` 变得不适用。**可以先下载到本地后通过本地安装**。
 **注意**，请勿使用迅雷离线下载，亲测下载后的文件会损坏。
 
 <!-- more  -->
 **获取下载链接**
-执行命令`vagrant box add laravel/homestead`后会出来三个选项，选择`virtualbox`后出现在`Downloading`后的地址为下载链接。
+　　执行命令`vagrant box add laravel/homestead`后会出来三个选项，选择`virtualbox`后出现在`Downloading`后的地址为下载链接。
 ```bash
 $ vagrant box add laravel/homestead
 ==> box: Loading metadata for box 'laravel/homestead'
@@ -41,8 +41,8 @@ $ Enter your choice: 2
 `https://vagrantcloud.com/laravel/boxes/homestead/versions/2.0.0/providers/virtualbox.box`
 
 **从本地安装**
-假设把下载下来的box命名为`homestead-virtualbox-2.0.0.box`，可以使用以下方法导入`.box` 文件：
-1、在 .box 的同文件夹下创建一个 `metadata.json` 文件。json文件命名是随便的,此文件在后面的命令行中会用到。内容为以下:
+　　假设把下载下来的box命名为`homestead-virtualbox-2.0.0.box`，可以使用以下方法导入`.box` 文件：
+　　1、在 .box 的同文件夹下创建一个 `metadata.json` 文件。json文件命名是随便的,此文件在后面的命令行中会用到。内容为以下:
 ``` json
 {
     "name": "laravel/homestead",
@@ -65,12 +65,12 @@ $ Enter your choice: 2
 - url - 支持 绝对文件路径 和 相对文件路径
 	如 "url": "file:///e:/boxes/homestead-virtualbox-2.0.0.box"
 
-2、运行以下命令导入，使用新建的json文件导入盒子：
+　　2、运行以下命令导入，使用新建的json文件导入盒子：
 ```bash
 vagrant box add metadata.json
 ```
 
-3、运行 list 命令查看是否添加成功：
+　　3、运行 list 命令查看是否添加成功：
 ```bash
 vagrant box list
 ```
@@ -125,10 +125,10 @@ config.vm.network "forwarded_port", guest: 80, host: 8888, host_ip: "127.0.0.1",
 ```
 
 ### 同步读取慢（不建议） 
-`Vagrant` 默认通过 `vagrantfile` 执行同步，并可以很好的执行。但是如果不满意同步的速度，`windows` 可以也使用 `rsync`，但是不建议。
-window7 下使用`rsync`，可解决`vagrant` 共享目录读取速度慢的问题，采用的是一次性单向同步，只在执行 `vagrant up` 或 `vagrant reload`时同步一次。
-修改宿主机上的文件后，可以结合 `vagrant  rsync` and `vagrant rsync-auto`可以手动同步。
-在 `Vagrantfile` 文件中设置同步目录为 `rsync`
+　　`Vagrant` 默认通过 `vagrantfile` 执行同步，并可以很好的执行。但是如果不满意同步的速度，`windows` 可以也使用 `rsync`，但是不建议。
+　　window7 下使用`rsync`，可解决`vagrant` 共享目录读取速度慢的问题，采用的是一次性单向同步，只在执行 `vagrant up` 或 `vagrant reload`时同步一次。
+　　修改宿主机上的文件后，可以结合 `vagrant  rsync` and `vagrant rsync-auto`进行手动同步。
+在 `Vagrantfile` 文件中设置同步目录为 `rsync`。
 ``` ruby
 config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true
 ```
@@ -136,7 +136,7 @@ config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__auto: true
 - 把 `rsync.exe` 的路径加入 windows的 `path` 环境。
 - 执行 `vagrant reload` ，现在可以享受 windows下的vbox极速共享目录了。
 
-### FTP或SFTP提交代码到FTP服务器
+### FTP或SFTP提交代码
 配置虚拟机，在`vagrantfile`中添加如下内容
 ```
 config.push.define "ftp" do |push|
