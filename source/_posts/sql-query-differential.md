@@ -19,6 +19,7 @@ select * from A where A.id not in (select B.id from B)
 ```sql
 select * from A left join B on A.id = B.id where B.id is null 
 ```
+![](/images/2012050916243279.png)
 
 ### 方法三
 最快的方法
