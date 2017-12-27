@@ -2,10 +2,7 @@
 title: Hexo + Github + MarkDown + Subdomain 搭建博客
 date: 2017-07-07 17:07:04
 tags:
-- Hexo
 - Blog
-- Github
-- MarkDown
 categories:
 - Github
 - blog

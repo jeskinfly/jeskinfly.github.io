@@ -3,7 +3,6 @@ title: Zepto.js全局设置headers
 date: 2017-08-10 17:53:29
 tags:
 - Laravel
-- Zepto.js
 
 categories:
 - PHP
