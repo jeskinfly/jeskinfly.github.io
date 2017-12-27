@@ -20,3 +20,6 @@ location /{
 	proxy_set_header client-real-ip $remote_addr
 }
 ```
+
+### 数据库存储ip
+　　存储时使用ip2long()，把ip转换为数字；取出时，使用long2ip()，格式转换回来。
