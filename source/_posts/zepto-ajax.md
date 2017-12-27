@@ -7,7 +7,7 @@ tags:
 - Laravel
 categories:
 - PHP
-- Laravel
+- laravel
 ---
 
 ### 最后总结的测试代码：

@@ -9,7 +9,7 @@ tags:
 - 自动化部署
 categories:
 - PHP
-- Laravel
+- laravel
 
 ---
 

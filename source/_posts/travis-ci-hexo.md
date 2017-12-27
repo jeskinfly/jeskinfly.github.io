@@ -6,8 +6,8 @@ tags:
 - Github
 - Hexo
 categories:
-- Travis CI
-- Blog
+- Github
+- blog
 ---
 ### 创建分支存储源代码
 在本地创建分支 `hexo` 来存储源代码，在根目录执行如下命令:

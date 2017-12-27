@@ -7,8 +7,8 @@ tags:
 - Github
 - 静态站点
 categories:
-- GitHub
-- 个人博客
+- Github
+- blog
 ---
 ### 安装NodeJs
 下载及安装 [菜鸟教程 -- Node.js 安装配置](http://www.runoob.com/nodejs/nodejs-install-setup.html)
