@@ -2,9 +2,7 @@
 title: Travis CI自动持续化部署博客
 date: 2017-08-07 16:34:52
 tags:
-- Travis CI
-- Github
-- Hexo
+- Blog
 categories:
 - Github
 - blog
