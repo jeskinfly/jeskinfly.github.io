@@ -3,8 +3,6 @@ title: laravel安装homestead要注意的几个问题
 date: 2017-07-31 18:22:13
 tags:
 - Laravel
-- Vagrant
-- Homestead
 categories:
 - PHP
 - laravel

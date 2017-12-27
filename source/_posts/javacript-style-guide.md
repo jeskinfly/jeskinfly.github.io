@@ -2,7 +2,7 @@
 title: 合理编写JavaScript
 date: 2017-07-28 17:45:48
 tags:
-- javascript
+- JavaScript
 - 代码规范
 categories:
 - javascript

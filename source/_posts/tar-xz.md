@@ -2,8 +2,7 @@
 title: .tar.xz后缀的文件如何解压
 date: 2017-09-26 17:36:45
 tags: 
-- xz
-- tar
+- Linux
 categories:
 - Linux
 ---

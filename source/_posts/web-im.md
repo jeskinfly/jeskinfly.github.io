@@ -3,7 +3,6 @@ title: 通过web实现IM功能
 date: 2017-12-19 15:29:51
 tags:
 - IM
-- Ajax
 - WebSocket
 ---
 ### web 的通信方式
