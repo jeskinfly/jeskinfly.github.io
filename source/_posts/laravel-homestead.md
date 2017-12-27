@@ -4,9 +4,7 @@ date: 2017-07-31 18:22:13
 tags:
 - Laravel
 - Vagrant
-- VirtualBox
 - Homestead
-- 自动化部署
 categories:
 - PHP
 - laravel

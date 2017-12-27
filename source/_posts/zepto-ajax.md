@@ -2,9 +2,9 @@
 title: Zepto.js全局设置headers
 date: 2017-08-10 17:53:29
 tags:
-- Zepto.js
-- Ajax
 - Laravel
+- Zepto.js
+
 categories:
 - PHP
 - laravel

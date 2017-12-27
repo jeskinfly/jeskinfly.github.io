@@ -3,7 +3,6 @@ title: MySQL查询：获取两个表的差集
 date: 2017-12-19 14:54:38
 tags:
 - MySQL
-- 差积
 categories:
 - MySQL
 ---

@@ -3,7 +3,6 @@ title: 获取IP地址信息
 date: 2017-08-02 16:12:05
 tags:
 - IP
-- API
 categories:
 - PHP
 - IP

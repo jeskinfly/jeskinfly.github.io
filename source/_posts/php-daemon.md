@@ -3,7 +3,6 @@ title: PHP程序守护进程化
 date: 2017-10-13 11:58:12
 tags:
 - PHP
-- 守护进程
 categories:
 - PHP
 - 守护进程

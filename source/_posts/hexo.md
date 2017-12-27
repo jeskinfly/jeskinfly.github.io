@@ -5,7 +5,7 @@ tags:
 - Hexo
 - Blog
 - Github
-- 静态站点
+- MarkDown
 categories:
 - Github
 - blog
