@@ -20,8 +20,6 @@ networks:
       ip: "192.168.10.20"
       bridge: "en1: Wi-Fi (AirPort)"
 
-<!-- more  -->
-
 # 设置虚拟机内存大小
 memory: 2048
 

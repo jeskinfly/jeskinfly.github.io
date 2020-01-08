@@ -15,7 +15,6 @@ categories:
 ```bash
 $ ssh user@host
 ```
-<!-- more  -->
 
 SSH的默认端口是22，也就是说，你的登录请求会送进远程主机的22端口。使用p参数，可以修改这个端口。
 
@@ -25,6 +24,7 @@ $ ssh -p 2222 user@host
 
 如果你是第一次登录对方主机，系统会出现下面的提示：
 
+<!-- more  -->
 
 ``` bash
 $ ssh user@host
