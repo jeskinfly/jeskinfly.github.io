@@ -1,0 +1,1112 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="二维码,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="什么是二维码　　二维条码/二维码（2-dimensional bar code）是用某种特定的几何图形按一定规律在平面（二维方向上）分布的黑白相间的图形记录数据符号信息的；在代码编制上巧妙地利用构成计算机内部逻辑基础的“0”、“1”比特流的概念，使用若干个与二进制相对应的几何形体来表示文字数值信息，通过图象输入设备或光电扫描设备自动识读以实现信息自动处理。　　常见技术标准有PDF417，QRCod">
+<meta name="keywords" content="二维码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识二维码">
+<meta property="og:url" content="http://blog.mealive.cn/2017/08/29/qrcode/index.html">
+<meta property="og:site_name" content="Jeskinfly&#39;s blog">
+<meta property="og:description" content="什么是二维码　　二维条码/二维码（2-dimensional bar code）是用某种特定的几何图形按一定规律在平面（二维方向上）分布的黑白相间的图形记录数据符号信息的；在代码编制上巧妙地利用构成计算机内部逻辑基础的“0”、“1”比特流的概念，使用若干个与二进制相对应的几何形体来表示文字数值信息，通过图象输入设备或光电扫描设备自动识读以实现信息自动处理。　　常见技术标准有PDF417，QRCod">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.mealive.cn/images/20170810105406.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/2311420438521.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/5a2b486f84958348b010c3d8be47b3fe_b.jpg">
+<meta property="og:image" content="http://blog.mealive.cn/images/69741420438521.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/QR_Format_Information.jpg">
+<meta property="og:image" content="http://blog.mealive.cn/images/29105437-d29c553d2188454e856435c70f816fee.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/29105437-8f99f7c257b64169b83a54925a1f1954.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/29105437-17e1c76fafd14881825aafe8be87ad15.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/QR_Character_Placement.svg/1492px-QR_Character_Placement.svg.png">
+<meta property="og:image" content="http://www.qrcode.com/zh/img/cell/cellImageLeft.png">
+<meta property="og:image" content="http://www.qrcode.com/zh/img/cell/cellImageRight.png">
+<meta property="og:image" content="http://www.qrcode.com/zh/img/cell/settingImageLeft.png">
+<meta property="og:image" content="http://www.qrcode.com/zh/img/trouble/warpImage.png">
+<meta property="og:image" content="http://www.qrcode.com/zh/img/trouble/closeImage.png">
+<meta property="og:image" content="http://www.qrcode.com/zh/img/trouble/onTopImage.png">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/538-623026f12e28b0fa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2020-01-08T07:09:13.596Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初识二维码">
+<meta name="twitter:description" content="什么是二维码　　二维条码/二维码（2-dimensional bar code）是用某种特定的几何图形按一定规律在平面（二维方向上）分布的黑白相间的图形记录数据符号信息的；在代码编制上巧妙地利用构成计算机内部逻辑基础的“0”、“1”比特流的概念，使用若干个与二进制相对应的几何形体来表示文字数值信息，通过图象输入设备或光电扫描设备自动识读以实现信息自动处理。　　常见技术标准有PDF417，QRCod">
+<meta name="twitter:image" content="http://blog.mealive.cn/images/20170810105406.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.mealive.cn/2017/08/29/qrcode/">
+
+
+
+
+
+  <title> 初识二维码 | Jeskinfly's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jeskinfly's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活本是阳光的，不要失去她原本的色彩</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.mealive.cn/2017/08/29/qrcode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jeskinfly">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jeskinfly's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                初识二维码
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-29T16:39:31+00:00">
+                2017-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/其他/" itemprop="url" rel="index">
+                    <span itemprop="name">其他</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/29/qrcode/" class="leancloud_visitors" data-flag-title="初识二维码">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="什么是二维码"><a href="#什么是二维码" class="headerlink" title="什么是二维码"></a>什么是二维码</h3><p>　　二维条码/二维码（2-dimensional bar code）是用某种特定的几何图形按一定规律在平面（二维方向上）分布的黑白相间的图形记录数据符号信息的；在代码编制上巧妙地利用构成计算机内部逻辑基础的“0”、“1”比特流的概念，使用若干个与二进制相对应的几何形体来表示文字数值信息，通过图象输入设备或光电扫描设备自动识读以实现信息自动处理。<br>　　常见技术标准有PDF417，QRCode，Code49Code16K，CodeOne等20余种。其中QRCode因为具有识读速度快、信息容量大、占用空间小、保密性强、可靠性高的优势，是目前使用最为广泛的一种二维码。<br>　　QRCode 正方形，只有两种颜色，在4个角落的其中3个，印有像“回”字的的小正方图案。QR码是属于开放式的标准，QR码的规格公开，而发明者的专利权益不会被执行。</p>
+<p>　　QR码的“QR”源自“Quick Response”的缩写。</p>
+<a id="more"></a>
+<h3 id="版本信息"><a href="#版本信息" class="headerlink" title="版本信息"></a>版本信息</h3><p>　　QR码一共提供40种不同版本存储密度的结构，对应指示图的“版本信息”，Version 1为21×21模块（模块为QR码中的最小单元），Version 2为25x25像素大小，每增加一个版本，长宽各增加4个模块，最大的版本40为177×177模块。<br>　　计算公式是：(V-1)*4 + 21（V是版本号）。</p>
+<p><img src="/images/20170810105406.png" alt></p>
+<h3 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h3><p>　　二维码的容量取决于它的版本和错误纠正级别，以及编码的数据类型。</p>
+<p>　　QR码最大数据容量（对于版本40）：</p>
+<p><img src="/images/2311420438521.png" alt></p>
+<p>　　</p>
+<h3 id="容错率"><a href="#容错率" class="headerlink" title="容错率"></a>容错率</h3><p>　　容错率也叫纠错率，就是指二维码图形如果有破损，仍然可以被机器读取内容，QR码最高可以到7%~30%面积破损仍可被读取。</p>
+<p><img src="/images/5a2b486f84958348b010c3d8be47b3fe_b.jpg" alt></p>
+<p>例如：在二维码中间加上logo，建议选择H级容错率。</p>
+<h3 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h3><p><img src="/images/69741420438521.png" alt></p>
+<h4 id="定位图案"><a href="#定位图案" class="headerlink" title="定位图案"></a>定位图案</h4><ul>
+<li>位置探测图形：标记二维码整体的位置。</li>
+<li>定位图形：标记二维码的数据内容的位置。</li>
+<li>校正图形：大于 Version 2版本的二维码才有，根据版本信息来确定校正图形的数量和位置。主要用于QR码形状的矫正，尤其是当QR码印刷在不平坦的面上，或者拍照时候发生畸变等。</li>
+</ul>
+<h4 id="纠错码字"><a href="#纠错码字" class="headerlink" title="纠错码字"></a>纠错码字</h4><p>　　用于修正二维码损坏带来的错误。通过 <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction" target="_blank" rel="noopener">Reed-Solomon error correction</a>（里德-所罗门纠错算法）来实现的。</p>
+<h4 id="版本信息-1"><a href="#版本信息-1" class="headerlink" title="版本信息"></a>版本信息</h4><p>　　二维码的规格，QR码符号共有40种规格的矩阵（一般为黑白色），从21×21（版本1），到177×177（版本40），每一版本符号比前一版本 每边增加4个模块。</p>
+<h4 id="格式信息"><a href="#格式信息" class="headerlink" title="格式信息"></a>格式信息</h4><p>　　格式信息记录两个方面：纠错级别和用于符号的掩码图案。</p>
+<p>　　<strong>纠错级别</strong>：包含L、M、Q和H四个级别。L可纠正约7%错误、M级别可纠正约15%错误、Q级别可纠正约25%错误、H级别可纠正约30%错误。RS码原理比较复杂，整体基于“任意k个确定点可表示一个阶数至少为k-1的多项式”，实际上发送超过k个点，就算中间有一些错误，也能通过数学原理反推出最初的多项式，从而获得信息。并不是所有位置都可以缺损，像最明显的那三个角上的方框，直接影响初始定位。中间零散的部分是内容编码，可以容忍缺损。</p>
+<p>　　<strong>掩码</strong>：用于分解数据区域中可能会混淆扫描仪的模式，例如大的空白区域或看起来像定位符的误导功能。掩模图案被定义在必要时重复以覆盖整个符号的网格上。对应于掩模暗区的模块被反转。使用<a href="https://en.wikipedia.org/wiki/BCH_code" target="_blank" rel="noopener">BCH代码</a>保护格式信息免受错误，每个QR符号中都包含两个完整的副本。</p>
+<p><img src="/images/QR_Format_Information.jpg" alt></p>
+<h4 id="数据编码"><a href="#数据编码" class="headerlink" title="数据编码"></a>数据编码</h4><ul>
+<li><p><strong>Numeric mode</strong>，数字编码，标识码为：0001。从 0 到9。如果需要编码的数字的个数不是 3 的倍数，那么，最后剩下的 1 或 2 位数会被转成 4 或 7bits，则其它的每 3 位数字会被编成 10，12，14bits，编成多长还要看二维码的尺寸( 表 Table 3 )。</p>
+</li>
+<li><p><strong>Alphanumeric mode</strong>，字符编码，标识码为：0010。包括 0-9，大写的A到Z（没有小写），以及符号$ % * + – . / : 包括空格。这些字符会映射成一个字符索引表。如下所示：（其中的 SP 是空格，Char 是字符，Value 是其索引值） 编码的过程是把字符两两分组，然后转成下表的 45 进制，然后转成 11bits 的二进制，如果最后有一个落单的，那就转成 6bits 的二进制。而编码模式和字符的个数需要根据不同的 Version 尺寸编成9, 11 或 13 个二进制( 表 Table 3 )。</p>
+<p><img src="/images/29105437-d29c553d2188454e856435c70f816fee.png" alt></p>
+</li>
+<li><p><strong>Byte mode</strong>，字节编码，标识码为：0100。可以是0-255 的 ISO-8859-1 字符。有些二维码的扫描器可以自动检测是否是 UTF-8 的编码。</p>
+</li>
+<li><p><strong>Kanji mode</strong> 这是日文编码，也是双字节编码，标识码为：1000。同样，也可以用于中文编码。日文和汉字的编码会减去一个值。如：在 0X8140 to 0X9FFC 中的字符会减去 8140，在 0XE040 到 0XEBBF 中的字符要减去 0XC140，然后把前两位拿出来乘以 0XC0，然后再加上后两位，最后转成 13bit 的编码。</p>
+</li>
+</ul>
+<p><img src="/images/29105437-8f99f7c257b64169b83a54925a1f1954.png" alt></p>
+<ul>
+<li><strong>Extended Channel Interpretation (ECI) mode</strong> 主要用于特殊的字符集。并不是所有的扫描器都支持这种编码。</li>
+<li><strong>Structured Append mode</strong> 用于混合编码，也就是说，这个二维码中包含了多种编码格式。</li>
+<li><strong>FNC1 mode</strong> 这种编码方式主要是给一些特殊的工业或行业用的。比如 GS1 条形码之类的。</li>
+</ul>
+<p><img src="/images/29105437-17e1c76fafd14881825aafe8be87ad15.png" alt></p>
+<h5 id="示例一：数字编码"><a href="#示例一：数字编码" class="headerlink" title="示例一：数字编码"></a>示例一：数字编码</h5><p>在 Version 1 的尺寸下，纠错级别为H的情况下，编码： 01234567<br>1、 把上述数字分成三组: 012 345 67<br>2、把他们转成二进制:  012 转成 0000001100；  345 转成 0101011001；  67 转成 1000011。<br>3、把这三个二进制串起来: 0000001100 0101011001 1000011<br>4、把数字的个数转成二进制 (version 1-H 是 10 bits ): 8 个数字的二进制是 0000001000<br>5、把数字编码的标志 0001 和第 4 步的编码加到前面:  0001 0000001000 0000001100 0101011001 1000011</p>
+<h5 id="示例二：字符编码"><a href="#示例二：字符编码" class="headerlink" title="示例二：字符编码"></a>示例二：字符编码</h5><p>在 Version 1 的尺寸下，纠错级别为H的情况下，编码: AC-42<br>1、从字符索引表中找到 AC-42 这五个字条的索引 (10,12,41,4,2)<br>2、两两分组: (10,12) (41,4) (2)<br>3、把每一组转成 11bits 的二进制:<br>　　(10,12) 10<em>45+12 等于 462 转成 00111001110<br>　　(41,4) 41</em>45+4 等于 1849 转成 11100111001<br>　　(2) 等于 2 转成 000010<br>4、把这些二进制连接起来：00111001110 11100111001 000010<br>5、把字符的个数转成二进制 (Version 1-H 为 9 bits ): 5 个字符，5 转成 000000101<br>6、在头上加上编码标识 0010 和第 5 步的个数编码:  0010 000000101 00111001110 11100111001 000010</p>
+<h4 id="结束符和补齐符"><a href="#结束符和补齐符" class="headerlink" title="结束符和补齐符"></a>结束符和补齐符</h4><p>假如我们有个“HELLO WORLD”的字符串要编码，根据上面的示例二，我们可以得到下面的编码，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">编码	 字符数	   HELLO WORLD的编码</span><br><span class="line">0010   000001010   01100001011 01111000110 10001011100 10110111000 10011010100 001101</span><br></pre></td></tr></table></figure></p>
+<p><strong>结束符</strong><br>　　如果编码后的字符长度不足当前版本和纠错级别所存储的容量，则在后续补”0000”,如果容量已满则无需添加终止符。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">编码   字符数       HELLO WORLD的编码                                                   结束</span><br><span class="line">0010   000001011   01100001011 01111000110 10001011100 10110111000 10011010100 001101  0000</span><br></pre></td></tr></table></figure></p>
+<p><strong>按8bits重排</strong><br>　　将编码按8bit一组，形成码字。如果尾部数据不足8bit,则在尾部充0。<br>　　上面一共有78个bits，所以，我们还要最后面加上2个0，然后按8个bits分好组：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">编码    字符数           HELLO WORLD的编码                                              结束</span><br><span class="line">0010   000001011   01100001011 01111000110 10001011100 10110111000 10011010100 001101  000000</span><br></pre></td></tr></table></figure></p>
+<p><strong>补齐码（Padding Bytes）</strong><br>最后，如果编码后的数据不足版本及纠错级别的最大容量，则在尾部补充 “11101100” 和”00010001”,直到全部填满。（这两个二进制转成十进制是236和17）关于每一个Version的每一种纠错级别的最大Bits限 制，可以参看QR Code Specification的第28页到32页的Table-7一表。</p>
+<p>假设我们需要编码的是Version 1的Q纠错级，那么，其最大需要104个bits，而我们上面只有80个bits，所以，还需要24个bits，也就是需要3个Padding Bytes，我们就添加三个，于是得到下面的编码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">编码     字符数    HELLO WORLD的编码                                                 结束符 补齐码</span><br><span class="line">00100000 01011011 00001011 01111000 11010001 01110010 11011100 01001101 01000011 01000000 11101100 00010001 11101100</span><br></pre></td></tr></table></figure></p>
+<h3 id="编码过程"><a href="#编码过程" class="headerlink" title="编码过程"></a><strong>编码过程</strong></h3><p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/QR_Character_Placement.svg/1492px-QR_Character_Placement.svg.png" alt="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/QR_Character_Placement.svg/1492px-QR_Character_Placement.svg.png"></p>
+<p><strong>数据编码：</strong>将数据字符转换为位流，每8位一个码字，整体构成一个数据的码字序列。其实知道这个数据码字序列就知道了二维码的数据内容。</p>
+<p>对于字母、中文、日文等只是分组的方式、模式等内容有所区别，基本方法是一致的。二维码虽然比起一维条码具有更强大的信息记载能力，但也是有容量限制。</p>
+<p><strong>纠错编码：</strong>按需要将上面的码字序列分块，并根据纠错等级和分块的码字，产生纠错码字，并把纠错码字加入到数据码字序列后面，成为一个新的序列。</p>
+<p><strong>版本信息：</strong>生成版本信息放入相应区域内。版本7-40都包含了版本信息，没有版本信息的全为0。二维码上两个位置包含了版本信息，它们是冗余的。版本信息共18位，6X3的矩阵，其中6位时数据为，如版本号8，数据位的信息时 001000，后面的12位是纠错位。</p>
+<h3 id="创建二维码基本步骤"><a href="#创建二维码基本步骤" class="headerlink" title="创建二维码基本步骤"></a>创建二维码基本步骤</h3><h4 id="第一步：数据分析"><a href="#第一步：数据分析" class="headerlink" title="第一步：数据分析"></a>第一步：数据分析</h4><p>　　二维码标准有多种编码模式：数字，字符，字节和日文等模式，每个模式使用不同的方法将文本转换为二进制数字，选择最优化的编码模式，尽可能用最短的一串二进制数字来编码数据。</p>
+<h4 id="第二步：数据编码"><a href="#第二步：数据编码" class="headerlink" title="第二步：数据编码"></a>第二步：数据编码</h4><p>　　选择错误校正级别，确定数据的最小版本，增加模式指示符，增加字符计数指示符，使用所选模式进行编码，[分成8位码字和添加补齐码]。</p>
+<h4 id="第三步：生成纠错码"><a href="#第三步：生成纠错码" class="headerlink" title="第三步：生成纠错码"></a>第三步：生成纠错码</h4><p>　　将数据码分组，执行多项式长除法，使用逐字节模100011101生成2的幂，生成多项式，生成纠错码，多次运算计算结果</p>
+<h4 id="第四步：最终编码"><a href="#第四步：最终编码" class="headerlink" title="第四步：最终编码"></a>第四步：最终编码</h4><p>　　确定块数和纠错码字，数据交替排列，转为二进制，添加剩余位（补齐码）</p>
+<h4 id="第五步：矩阵中的模块放置"><a href="#第五步：矩阵中的模块放置" class="headerlink" title="第五步：矩阵中的模块放置"></a>第五步：矩阵中的模块放置</h4><p>　　放置位置探测图形、定位图形、校正图形、数据块。保留版本信息、格式信息区域。</p>
+<h4 id="第六步：掩码图案"><a href="#第六步：掩码图案" class="headerlink" title="第六步：掩码图案"></a>第六步：掩码图案</h4><p>　　根据评价条件确定最佳掩码图案</p>
+<h4 id="第七步：格式和版本信息"><a href="#第七步：格式和版本信息" class="headerlink" title="第七步：格式和版本信息"></a>第七步：格式和版本信息</h4><p>　　最后放置版本信息、格式信息。</p>
+<p>具体编码过程请移步<a href="http://tiierr.xyz/2017/02/24/%E4%BA%8C%E7%BB%B4%E7%A0%81-%E7%94%9F%E6%88%90%E5%8E%9F%E7%90%86/" target="_blank" rel="noopener">【博客】你今天真好看</a></p>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><h4 id="如何导入QR码"><a href="#如何导入QR码" class="headerlink" title="如何导入QR码?"></a>如何导入QR码?</h4><p>QR码系统可以分为两道工序，即QR码的制作和读取。QR码的制作是用“软件和打印机”来实现，读取时使用“扫描仪和应用程序”。<a href="http://www.qrcode.com/zh/howto/app.html" target="_blank" rel="noopener">用普通手机、智能手机、平板电脑</a>各种移动设备读取QR码。</p>
+<h4 id="同样的内容做出来的二维码为什么都不一样？"><a href="#同样的内容做出来的二维码为什么都不一样？" class="headerlink" title="同样的内容做出来的二维码为什么都不一样？"></a>同样的内容做出来的二维码为什么都不一样？</h4><p>这是由于，这些特定的几何图形按照一定规律，然后随机的分布在平面上。</p>
+<h4 id="什么样的情况或造成二维码无法读取？"><a href="#什么样的情况或造成二维码无法读取？" class="headerlink" title="什么样的情况或造成二维码无法读取？"></a>什么样的情况或造成二维码无法读取？</h4><p>码元变形。</p>
+<p>码元是构成QR码的一个方形图块，大小取决于打印机打印头的点数。如下图：</p>
+<p><img src="http://www.qrcode.com/zh/img/cell/cellImageLeft.png" alt="http://www.qrcode.com/zh/img/cell/cellImageLeft.png"><img src="http://www.qrcode.com/zh/img/cell/cellImageRight.png" alt="http://www.qrcode.com/zh/img/cell/cellImageRight.png"></p>
+<p>例如，当打印头密度为300dpi时，在5点/码元的情况下码元大小为0.42mm/码元。构成一码元的点数越多，打印质量会越高，运用更稳定，可免受打印粗细、送纸速度不均匀、打印机轴变形、飞白等问题的影响。为了实现稳定的运用，<a href="http://www.denso-wave.com/zh/index.html" target="_blank" rel="noopener">DENSO WAVE INCORPORATED</a>建议每个码元打印4点以上。</p>
+<p><img src="http://www.qrcode.com/zh/img/cell/settingImageLeft.png" alt="http://www.qrcode.com/zh/img/cell/settingImageLeft.png"> </p>
+<p>在确定QR码版本后，还要确定以码元（构成QR码的一个方形图块）要以多少mm打印，码元大小不同，QR码的实际尺寸也会有所不同。 码元越大，QR码扫描仪就越容易读取。</p>
+<h4 id="用图像处理工具等对QR码进行放大或缩小，会导致各个码元的变形。"><a href="#用图像处理工具等对QR码进行放大或缩小，会导致各个码元的变形。" class="headerlink" title="用图像处理工具等对QR码进行放大或缩小，会导致各个码元的变形。"></a>用图像处理工具等对QR码进行放大或缩小，会导致各个码元的变形。</h4><p>虽然外观上与普通的QR码一样，但实际上却很难读取，甚至有时无法读取。</p>
+<p><img src="http://www.qrcode.com/zh/img/trouble/warpImage.png" alt="http://www.qrcode.com/zh/img/trouble/warpImage.png"></p>
+<h4 id="边缘有文字或图像"><a href="#边缘有文字或图像" class="headerlink" title="边缘有文字或图像"></a>边缘有文字或图像</h4><p>若在QR码的边缘印上文字或图像，则无法留出足够的边缘空白。<br>这样的二维码很难读取，甚至有时无法读取。</p>
+<p><img src="http://www.qrcode.com/zh/img/trouble/closeImage.png" alt="http://www.qrcode.com/zh/img/trouble/closeImage.png"></p>
+<h4 id="文字和图像等标记摆在二维码上"><a href="#文字和图像等标记摆在二维码上" class="headerlink" title="文字和图像等标记摆在二维码上"></a>文字和图像等标记摆在二维码上</h4><p>若在和QR码重叠的位置上印上文字或图像等标记，则明暗对比将变得模糊。<br>这样的二维码很难读取，甚至有时无法读取。</p>
+<p><img src="http://www.qrcode.com/zh/img/trouble/onTopImage.png" alt="http://www.qrcode.com/zh/img/trouble/onTopImage.png"></p>
+<h4 id="可将图像和声音作为数据写入吗？"><a href="#可将图像和声音作为数据写入吗？" class="headerlink" title="可将图像和声音作为数据写入吗？"></a>可将图像和声音作为数据写入吗？</h4><p>　　一个QR码的容量最多不到3KB（版本40，纠错级别L）。而且，如果是用手机读取，手机所能读取的QR码因厂家和机型而有别，数据量一般为271个字节（版本10，纠错级别L）。可以理解为，通过手机读取QR码时，无法容纳图像和声音。</p>
+<h3 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h3><h4 id="微信的扫码登录实现原理"><a href="#微信的扫码登录实现原理" class="headerlink" title="微信的扫码登录实现原理"></a>微信的扫码登录实现原理</h4><p>　　网页版微信刚推出时，无数人被它的登录方式惊艳了一下，不需要输入用户名密码，打开手机微信扫一扫，便自动登录。从原理上讲，二维码只能是一段文本的编码，如何用它实现快捷登录的呢？</p>
+<p>打开网页版微信，可以看到如下的页面：</p>
+<p>微信扫码界面</p>
+<p>如果你用我查查、支付宝、新浪微博等软件扫码二维码，你会发现此二维码解析出来是如下的网址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://login.weixin.qq.com/l/obsbQ-Dzag==</span><br></pre></td></tr></table></figure>
+<p>接下来详细介绍一下扫码登录具体的每个步骤：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/538-623026f12e28b0fa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="http://upload-images.jianshu.io/upload_images/538-623026f12e28b0fa.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"></p>
+<p>扫码登录完整流程</p>
+<p>①：用户 A 访问微信网页版，微信服务器为这个会话生成一个全局唯一的 ID，上面的 URL 中 <code>obsbQ-Dzag==</code> 就是这个 ID，此时系统并不知道访问者是谁。</p>
+<p>②：用户A打开自己的手机微信并扫描这个二维码，并提示用户是否确认登录。</p>
+<p>③：手机上的微信是登录状态，用户点击确认登录后，手机上的微信客户端将微信账号和这个扫描得到的 ID 一起提交到服务器</p>
+<p>④：服务器将这个 ID 和用户 A 的微信号绑定在一起，并通知网页版微信，这个 ID 对应的微信号为用户 A，网页版微信加载用户 A 的微信信息，至此，扫码登录全部流程完成</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/二维码/" rel="tag"># 二维码</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/10/zepto-ajax/" rel="next" title="Zepto.js全局设置headers">
+                <i class="fa fa-chevron-left"></i> Zepto.js全局设置headers
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/26/tar-xz/" rel="prev" title=".tar.xz后缀的文件如何解压">
+                .tar.xz后缀的文件如何解压 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jeskinfly">
+          <p class="site-author-name" itemprop="name">Jeskinfly</p>
+           
+              <p class="site-description motion-element" itemprop="description">Jeskinfly's blog</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeskinfly" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是二维码"><span class="nav-number">1.</span> <span class="nav-text">什么是二维码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#版本信息"><span class="nav-number">2.</span> <span class="nav-text">版本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容量"><span class="nav-number">3.</span> <span class="nav-text">容量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容错率"><span class="nav-number">4.</span> <span class="nav-text">容错率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本结构"><span class="nav-number">5.</span> <span class="nav-text">基本结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#定位图案"><span class="nav-number">5.1.</span> <span class="nav-text">定位图案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纠错码字"><span class="nav-number">5.2.</span> <span class="nav-text">纠错码字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#版本信息-1"><span class="nav-number">5.3.</span> <span class="nav-text">版本信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#格式信息"><span class="nav-number">5.4.</span> <span class="nav-text">格式信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据编码"><span class="nav-number">5.5.</span> <span class="nav-text">数据编码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#示例一：数字编码"><span class="nav-number">5.5.1.</span> <span class="nav-text">示例一：数字编码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#示例二：字符编码"><span class="nav-number">5.5.2.</span> <span class="nav-text">示例二：字符编码</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结束符和补齐符"><span class="nav-number">5.6.</span> <span class="nav-text">结束符和补齐符</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码过程"><span class="nav-number">6.</span> <span class="nav-text">编码过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建二维码基本步骤"><span class="nav-number">7.</span> <span class="nav-text">创建二维码基本步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：数据分析"><span class="nav-number">7.1.</span> <span class="nav-text">第一步：数据分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步：数据编码"><span class="nav-number">7.2.</span> <span class="nav-text">第二步：数据编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步：生成纠错码"><span class="nav-number">7.3.</span> <span class="nav-text">第三步：生成纠错码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第四步：最终编码"><span class="nav-number">7.4.</span> <span class="nav-text">第四步：最终编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第五步：矩阵中的模块放置"><span class="nav-number">7.5.</span> <span class="nav-text">第五步：矩阵中的模块放置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第六步：掩码图案"><span class="nav-number">7.6.</span> <span class="nav-text">第六步：掩码图案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第七步：格式和版本信息"><span class="nav-number">7.7.</span> <span class="nav-text">第七步：格式和版本信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常见问题"><span class="nav-number">8.</span> <span class="nav-text">常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何导入QR码"><span class="nav-number">8.1.</span> <span class="nav-text">如何导入QR码?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#同样的内容做出来的二维码为什么都不一样？"><span class="nav-number">8.2.</span> <span class="nav-text">同样的内容做出来的二维码为什么都不一样？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么样的情况或造成二维码无法读取？"><span class="nav-number">8.3.</span> <span class="nav-text">什么样的情况或造成二维码无法读取？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用图像处理工具等对QR码进行放大或缩小，会导致各个码元的变形。"><span class="nav-number">8.4.</span> <span class="nav-text">用图像处理工具等对QR码进行放大或缩小，会导致各个码元的变形。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#边缘有文字或图像"><span class="nav-number">8.5.</span> <span class="nav-text">边缘有文字或图像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文字和图像等标记摆在二维码上"><span class="nav-number">8.6.</span> <span class="nav-text">文字和图像等标记摆在二维码上</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可将图像和声音作为数据写入吗？"><span class="nav-number">8.7.</span> <span class="nav-text">可将图像和声音作为数据写入吗？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实际应用"><span class="nav-number">9.</span> <span class="nav-text">实际应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#微信的扫码登录实现原理"><span class="nav-number">9.1.</span> <span class="nav-text">微信的扫码登录实现原理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeskinfly</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("NgrincGO5vNowsOLnXvEQhGl-gzGzoHsz", "kl25hoEbMW7A45RI4vdx2l1U");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

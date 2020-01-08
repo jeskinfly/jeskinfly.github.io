@@ -1,0 +1,1089 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="IP,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="介绍目前主要的解析方式有两种：通过API，或通过IP数据库。 API优点1、编码简单，通过请求获得数据（通常是json数据）2、而且不用维护数据库，对本地没有负担。">
+<meta name="keywords" content="IP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="获取IP地址信息">
+<meta property="og:url" content="http://blog.mealive.cn/2017/08/02/api-ip/index.html">
+<meta property="og:site_name" content="Jeskinfly&#39;s blog">
+<meta property="og:description" content="介绍目前主要的解析方式有两种：通过API，或通过IP数据库。 API优点1、编码简单，通过请求获得数据（通常是json数据）2、而且不用维护数据库，对本地没有负担。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-08T07:09:13.596Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="获取IP地址信息">
+<meta name="twitter:description" content="介绍目前主要的解析方式有两种：通过API，或通过IP数据库。 API优点1、编码简单，通过请求获得数据（通常是json数据）2、而且不用维护数据库，对本地没有负担。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.mealive.cn/2017/08/02/api-ip/">
+
+
+
+
+
+  <title> 获取IP地址信息 | Jeskinfly's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jeskinfly's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活本是阳光的，不要失去她原本的色彩</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.mealive.cn/2017/08/02/api-ip/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jeskinfly">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jeskinfly's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                获取IP地址信息
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-02T16:12:05+00:00">
+                2017-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/IP/" itemprop="url" rel="index">
+                    <span itemprop="name">IP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/02/api-ip/" class="leancloud_visitors" data-flag-title="获取IP地址信息">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>目前主要的解析方式有两种：通过API，或通过IP数据库。</p>
+<h4 id="API"><a href="#API" class="headerlink" title="API"></a>API</h4><p><strong>优点</strong><br>1、编码简单，通过请求获得数据（通常是json数据）<br>2、而且不用维护数据库，对本地没有负担。</p>
+<a id="more"></a>
+<p><strong>缺点</strong><br>1、有并发限制。每秒只能发几条<br>2、上限限制。每天请求不超过一个上限。<br>3、<strong>地址可能面临变更</strong>。</p>
+<h4 id="本地数据"><a href="#本地数据" class="headerlink" title="本地数据"></a>本地数据</h4><p><strong>优点</strong><br>1、数据存储在本地，只有硬件限制。<br>2、可以获取任意格式。<br>3、可以随时取随时用。<br><strong>缺点</strong><br>1、需要编程解析数据。<br>2、需要维护数据。<br>3、需要考虑服务器负载。</p>
+<p><strong>提示</strong> : 前期开发可用API查询,并缓存查询的IP信息,后期根据请求的实际情况使用纯真数据库或GEOIP数据库在本地获取位置信息</p>
+<h3 id="淘宝IP地址库"><a href="#淘宝IP地址库" class="headerlink" title="淘宝IP地址库"></a>淘宝IP地址库</h3><p>提供的服务包括：<br>1、根据用户提供的IP地址，快速查询出该IP地址所在的地理信息和地理相关的信息，包括国家、省、市和运营商。<br>2、用户可以根据自己所在的位置和使用的IP地址更新我们的服务内容。</p>
+<p><strong>优势 :</strong><br>1、提供国家、省、市、县、运营商全方位信息，信息维度广，格式规范。<br>2、提供完善的统计分析报表，省准确度超过99.8%，市准确度超过96.8%，数据质量有保障。</p>
+<p><strong>示例 :</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ip = @file_get_contents(<span class="string">"http://ip.taobao.com/service/getIpInfo.php?ip="</span>.$_GET[<span class="string">"ip"</span>]);</span><br><span class="line">$ip = json_decode($ip,<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="新浪IP-API"><a href="#新浪IP-API" class="headerlink" title="新浪IP API"></a>新浪IP API</h3><p>新浪这个应该说是最好的。可以根据请求参数 <code>format</code> 自定义数据格式（默认为纯文本格式，<code>format</code> 的可选参数<code>js</code> ，<code>json</code>。下面列举的是 <code>js</code> 的格式）。</p>
+<p><strong>示例 :</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ip = @file_get_contents(<span class="string">"http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&amp;ip="</span>.$_GET[<span class="string">"ip"</span>]);</span><br><span class="line"><span class="keyword">echo</span> $ip;</span><br></pre></td></tr></table></figure>
+<p>返回值数据格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var remote_ip_info = &#123;“ret”:1,”start”:”59.37.164.179″,”end”:”59.37.165.17″,”country”:”\u4e2d\u56fd”,”province”:”\u5e7f\u4e1c”,”city”:”\u6c5f\u95e8″,”district”:””,”isp”:”\u7535\u4fe1″,”type”:””,”desc”:””&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="126-IP-API"><a href="#126-IP-API" class="headerlink" title="126 IP API"></a>126 IP API</h3><p>126提供的这个功能方面不如新浪但是数据相对来说是比较准确的。</p>
+<p>示例 :</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ip = @file_get_contents(<span class="string">"http://ip.ws.126.net/ipquery?ip="</span>.$_GET[<span class="string">"ip"</span>]);</span><br><span class="line"><span class="keyword">echo</span> $ip;</span><br></pre></td></tr></table></figure>
+<p>返回值数据格式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var lo=&quot;北京市&quot;, lc=&quot;朝阳区&quot;; var localAddress=&#123;city:&quot;朝阳区&quot;, province:&quot;北京市&quot;&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="腾讯位置服务"><a href="#腾讯位置服务" class="headerlink" title="腾讯位置服务"></a>腾讯位置服务</h3><p>　　腾讯支持数据格式 <code>JSON</code>, <code>JSONP</code>方式返回, 支持 <code>http</code> 和 <code>https</code> 协议  。</p>
+<p><strong>使用限制</strong><br>1、 需申请开发者密钥Key<br>2、日调用量：<code>10,000</code> 次/接口/Key<br>3、并发限制：<code>5</code> 次/秒/接口/Key</p>
+<p>超过日调用量和并发数的开发者，可通过以下途径解决：</p>
+<pre><code>对于多频次的相同请求，可通过缓存结果，并定时访问更新的方式，减少对在线服务调用的依赖；
+</code></pre><p><strong>地址</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://apis.map.qq.com/ws/location/v1/ip</span><br></pre></td></tr></table></figure>
+<p><strong>请求参数</strong></p>
+<div class="ip-api">
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>必填</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p</td>
+<td>否</td>
+<td>IP地址，缺省时会使用请求端的IP</td>
+<td>ip=202.106.0.20</td>
+</tr>
+<tr>
+<td>ey</td>
+<td>是</td>
+<td>开发密钥（Key）</td>
+<td>key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77</td>
+</tr>
+<tr>
+<td>utput</td>
+<td>否</td>
+<td>返回格式：支持JSON/JSONP，默认JSON</td>
+<td>output=json</td>
+</tr>
+<tr>
+<td>allback</td>
+<td>否</td>
+<td>JSONP方式回调函数</td>
+<td>callback=function1</td>
+</tr>
+</tbody>
+</table>
+<p></p></div><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//响应示例：</span><br><span class="line">&#123;</span><br><span class="line">    "status": 0, // 状态码，0为正常,</span><br><span class="line">                 // 310 请求参数信息有误，</span><br><span class="line">                 // 311 Key格式错误,</span><br><span class="line">                 // 306 请求有护持信息请检查字符串,</span><br><span class="line">                 // 110 请求来源未被授权</span><br><span class="line">    "message": "query ok", // 状态说明</span><br><span class="line">    "result": &#123;</span><br><span class="line">        "location": &#123;</span><br><span class="line">            "lng": 116.407526,  // 纬度</span><br><span class="line">            "lat": 39.90403     // 经度</span><br><span class="line">        &#125;,</span><br><span class="line">        "ad_info": &#123;</span><br><span class="line">            "nation": "中国",   // 国家</span><br><span class="line">            "province": "",     // 省</span><br><span class="line">            "city": "",         // 市</span><br><span class="line">            "adcode": 110000    // 行政区划代码</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p></p>
+<h3 id="百度IP定位"><a href="#百度IP定位" class="headerlink" title="百度IP定位"></a>百度IP定位</h3><p>使用以及限制与腾讯基本相同，此处不作详细介绍，请移步官方查看文档：<a href="http://lbsyun.baidu.com/index.php?title=webapi/ip-api" target="_blank" rel="noopener">百度IP定位</a></p>
+<h3 id="GEOIP"><a href="#GEOIP" class="headerlink" title="GEOIP"></a>GEOIP</h3><p>GeoIP IP智能系列产品分类 :<br>1、 <strong>API接口服务</strong>。 GeoIP根据IP返回的地址信息。<br>2、 <strong>从本地获取位置信息</strong>。提供网络查询免费开源IP数据库下载。<br><a href="https://github.com/maxmind/GeoIP2-php" target="_blank" rel="noopener">直达GitHub仓库PHP版本( 包含 <code>mmdb</code> 格式的IP数据库 )</a></p>
+<p>   直达官网链接 <a href="https://dev.maxmind.com/zh-hans/geoip/" target="_blank" rel="noopener">GEOIP</a></p>
+<h3 id="纯真IP数据库"><a href="#纯真IP数据库" class="headerlink" title="纯真IP数据库"></a>纯真IP数据库</h3><p>下载并安装软件，查找安装目录的文件 <code>qqwry.dat</code> ,可转换为数据库文件或通过类库解析使用。<br>实际IP地址一般为二进制: 01010101.10101010.00110011.11001100。<br>直达链接 <a href="https://link.zhihu.com/?target=http%3A//www.cz88.net/" target="_blank" rel="noopener">纯真</a><br>dat文件解压为txt查看内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0.0.0.0     0.255.255.255    IANA保留地址</span><br><span class="line">1.0.0.0     1.0.0.255        澳大利亚 亚太互联网信息中心</span><br><span class="line">1.0.1.0     1.0.3.255        福建省 电信</span><br><span class="line">1.0.4.0     1.0.7.255        澳大利亚 墨尔本Big Red集团</span><br><span class="line">1.0.8.0     1.0.15.255       广东省电信</span><br></pre></td></tr></table></figure></p>
+<p>每行三个字段，start, end, address，从start到end之间的IP都是address这个位置。因为end跟下一个start是连接的，所以只需要记录start: address就好了，可通过查找“小于等于给定IP的最大值”来获取地址。<br><strong>参考链接 :</strong><a href="http://www.cnblogs.com/anpengapple/p/5384985.html" target="_blank" rel="noopener">解析纯真IP地址库</a></p>
+<p>注：如果每一条ip对应一个address ，把所有ip的address写成一个列表？那么服务器得有200G来存放。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IP/" rel="tag"># IP</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/01/php-opcache/" rel="next" title="PHP OPcache 性能加速">
+                <i class="fa fa-chevron-left"></i> PHP OPcache 性能加速
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/07/travis-ci-hexo/" rel="prev" title="Travis CI自动持续化部署博客">
+                Travis CI自动持续化部署博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jeskinfly">
+          <p class="site-author-name" itemprop="name">Jeskinfly</p>
+           
+              <p class="site-description motion-element" itemprop="description">Jeskinfly's blog</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeskinfly" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#API"><span class="nav-number">1.1.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地数据"><span class="nav-number">1.2.</span> <span class="nav-text">本地数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#淘宝IP地址库"><span class="nav-number">2.</span> <span class="nav-text">淘宝IP地址库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新浪IP-API"><span class="nav-number">3.</span> <span class="nav-text">新浪IP API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#126-IP-API"><span class="nav-number">4.</span> <span class="nav-text">126 IP API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#腾讯位置服务"><span class="nav-number">5.</span> <span class="nav-text">腾讯位置服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#百度IP定位"><span class="nav-number">6.</span> <span class="nav-text">百度IP定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GEOIP"><span class="nav-number">7.</span> <span class="nav-text">GEOIP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#纯真IP数据库"><span class="nav-number">8.</span> <span class="nav-text">纯真IP数据库</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeskinfly</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("NgrincGO5vNowsOLnXvEQhGl-gzGzoHsz", "kl25hoEbMW7A45RI4vdx2l1U");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

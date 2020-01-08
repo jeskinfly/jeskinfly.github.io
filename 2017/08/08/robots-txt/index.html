@@ -1,0 +1,1092 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="搜索引擎,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="什么是robots.txt文件?　　robots.txt 文件是用来禁止搜索引擎收录的方法。原则上文件中不写禁止指令则为允许访问。">
+<meta name="keywords" content="搜索引擎">
+<meta property="og:type" content="article">
+<meta property="og:title" content="robots.txt详解">
+<meta property="og:url" content="http://blog.mealive.cn/2017/08/08/robots-txt/index.html">
+<meta property="og:site_name" content="Jeskinfly&#39;s blog">
+<meta property="og:description" content="什么是robots.txt文件?　　robots.txt 文件是用来禁止搜索引擎收录的方法。原则上文件中不写禁止指令则为允许访问。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-08T07:09:13.596Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="robots.txt详解">
+<meta name="twitter:description" content="什么是robots.txt文件?　　robots.txt 文件是用来禁止搜索引擎收录的方法。原则上文件中不写禁止指令则为允许访问。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.mealive.cn/2017/08/08/robots-txt/">
+
+
+
+
+
+  <title> robots.txt详解 | Jeskinfly's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jeskinfly's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活本是阳光的，不要失去她原本的色彩</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.mealive.cn/2017/08/08/robots-txt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jeskinfly">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jeskinfly's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                robots.txt详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-08T11:30:32+00:00">
+                2017-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/搜索引擎/" itemprop="url" rel="index">
+                    <span itemprop="name">搜索引擎</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/08/robots-txt/" class="leancloud_visitors" data-flag-title="robots.txt详解">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="什么是robots-txt文件"><a href="#什么是robots-txt文件" class="headerlink" title="什么是robots.txt文件?"></a>什么是robots.txt文件?</h3><p>　　<code>robots.txt</code> 文件是用来禁止搜索引擎收录的方法。<strong>原则上文件中不写禁止指令则为允许访问</strong>。<a id="more"></a><br>　　搜索引擎使用 <code>spider程序</code> 自动访问互联网上的网页并获取网页信息。<br>　　<code>spider</code> 在访问一个网站时，首先会检查该网站的根域下是否有一个叫做 <code>robots.txt</code> 的纯文本文件，这个文件用于指定 <code>spider</code> 在您网站上的抓取范围。您可以在您的网站中创建一个 <code>robots.txt</code> ，在文件中声明 该网站中不想被搜索引擎收录的部分或者指定搜索引擎只收录特定的部分。<br>　　请注意，仅当您的网站包含不希望被搜索引擎收录的内容时，才需要使用 <code>robots.txt</code>文件。如果您希望搜索引擎收录网站上所有内容，请勿建立 <code>robots.txt</code> 文件。</p>
+<h3 id="robots-txt文件放在哪里"><a href="#robots-txt文件放在哪里" class="headerlink" title="robots.txt文件放在哪里?"></a>robots.txt文件放在哪里?</h3><p>　　<code>robots.txt</code>文件应该放置在 <strong><code>网站根目录</code></strong> 下。</p>
+<h3 id="meta标签"><a href="#meta标签" class="headerlink" title="meta标签"></a>meta标签</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>meta标签中<strong>没有大小写之分</strong>，<code>name=&quot;robots&quot;</code> 表示所有的搜索引擎，<code>content</code> 部分有四个指令选项：<code>index</code>、<code>noindex</code>、<code>follow</code>、<code>nofollow</code>，指令间以 <code>,</code> 分隔。</p>
+<ul>
+<li><code>index</code> ：告诉搜索机器人抓取该页面，<code>noindex</code> 相反；</li>
+<li><code>follow</code>：表示搜索机器人可以沿着该页面上的链接继续抓取下去，<code>nofollow</code> 相反；</li>
+</ul>
+<p>缺省值是 <code>index</code> 和 <code>follow</code> 。</p>
+<p>这样，一共有四种组合：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;index,follow&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;noindex,follow&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;index,nofollow&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;noindex,nofollow&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>其中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;index,follow&quot;&gt;</span><br><span class="line">等同于 &lt;meta name=&quot;robots&quot; content=&quot;all&quot;&gt;</span><br><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;noindex,nofollow&quot;&gt;</span><br><span class="line">等同于&lt;meta name=&quot;robots&quot; content=&quot;none&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>　　<strong>注意：绝大多数的搜索引擎机器人都遵守robots.txt的规则，而对于Robots meta标签，目前支持的并不多。</strong>搜索引擎Google完全支持，还增加了一个指令“archive”，可以限制Google是否保留网页快照。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 表示抓取该站点中页面并沿着页面中链接抓取，但是不在Google上保留该页面的网页快照。--&gt;</span><br><span class="line">&lt;meta name=&quot;googlebot&quot; content=&quot;index,follow,noarchive&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="如何禁止跟踪网页的链接，而只对网页建索引？"><a href="#如何禁止跟踪网页的链接，而只对网页建索引？" class="headerlink" title="如何禁止跟踪网页的链接，而只对网页建索引？"></a>如何禁止跟踪网页的链接，而只对网页建索引？</h4><ul>
+<li>如果您不想搜索引擎追踪此网页上的链接，且不传递链接的权重，请将此元标记置入网页的 部分：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;index,nofollow&quot;&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>如果您不想百度追踪某一条 <strong>特定链接</strong> ，百度还支持更精确的控制，请将此标记直接写在某条链接上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;signin.php&quot; rel=&quot;nofollow&quot;&gt;sign in&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>要允许其他搜索引擎跟踪，但 <strong>仅防止百度</strong> 跟踪您网页的链接，请将此元标记置入网页的 部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;Baiduspider&quot; content=&quot;index,nofollow&quot;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="如何禁止在搜索结果中显示网页快照，而只对网页建索引？"><a href="#如何禁止在搜索结果中显示网页快照，而只对网页建索引？" class="headerlink" title="如何禁止在搜索结果中显示网页快照，而只对网页建索引？"></a>如何禁止在搜索结果中显示网页快照，而只对网页建索引？</h4><ul>
+<li><p>要防止 <strong>所有搜索引擎</strong> 显示您网站的快照，请将此元标记置入网页的部分： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;robots&quot; content=&quot;noarchive&quot;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>要允许其他搜索引擎显示快照，但 <strong>仅防止百度显示</strong> ，请使用以下标记：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;Baiduspider&quot; content=&quot;noarchive&quot;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注：此标记只是禁止百度显示该网页的快照，百度会继续为网页建索引，并在搜索结果中显示网页摘要。</p>
+<h3 id="robots-txt文件的格式"><a href="#robots-txt文件的格式" class="headerlink" title="robots.txt文件的格式"></a>robots.txt文件的格式</h3><h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4><p>在该文件中可以使用 <code>#</code> 进行注解，具体使用方法和UNIX中的惯例一样。</p>
+<h4 id="User-agent"><a href="#User-agent" class="headerlink" title="User-agent:"></a>User-agent:</h4><p>　　该项的值用于描述搜索引擎 <code>robot</code> 的名字。<br>　　如果有 <code>多条User-agent记录</code> 说明有 <code>多个robot</code> 会受到 “robots.txt” 的限制，对该文件来说，<strong>至少要有一条 User-agent 记录</strong>。<br>　　如果该项的值设为 <code>*</code> ，则对任何 robot 均有效，<br>　　如果在 “robots.txt” 文件中，加入 “User-agent:SomeBot” 和若干 Disallow 、 Allow 行，那么名为 “SomeBot” 只受到 “User-agent:SomeBot” 后面的 Disallow 和 Allow 行的限制。</p>
+<h4 id="Disallow"><a href="#Disallow" class="headerlink" title="Disallow:"></a>Disallow:</h4><p>　　该项的值用于描述不希望被访问的一组URL，这个值可以是一条完整的路径，也可以是路径的非空前缀，以Disallow项的值开头的URL不会被 robot 访问。<br>例如：<br>1、<code>&quot;Disallow:/help&quot;</code>：禁止robot访问/help.html、/helpabc.html、/help /index.html。<br>2、<code>&quot;Disallow:/help/&quot;</code>：则允许robot访问/help.html、/helpabc.html，不能访问 /help/index.html。<br>3、<code>&quot;Disallow:&quot;</code>：说明允许robot访问该网站的所有url。<br>　　在”/robots.txt”文件中，至少要有一 条Disallow记录。如果”/robots.txt”不存在或者为空文件，则对于所有的搜索引擎robot，该网站都是开放的。</p>
+<h4 id="Allow"><a href="#Allow" class="headerlink" title="Allow:"></a>Allow:</h4><p>　　该项的值用于描述希望被访问的一组URL，与Disallow项相似，这个值可以是一条完整的路径，也可以是路径的前缀，以Allow项的值开头的URL是允许robot访问的。<br>例如：<br><code>&quot;Allow:/hibaidu&quot;</code>：允许robot访问/hibaidu.htm、/hibaiducom.html、 /hibaidu/com.html。<br>　　一个网站的所有URL默认是Allow的，所以Allow通常与Disallow搭配使用，实现允许访问一部分网页 同时禁止访问其它所有URL的功能。</p>
+<h4 id="使用-“-“-和-“-”-："><a href="#使用-“-“-和-“-”-：" class="headerlink" title="使用 “*“ 和 “$” ："></a>使用 “*“ 和 “$” ：</h4><p>Baiduspider支持使用通配符”*“和”$”来模糊匹配url。<br><code>&quot;$&quot;</code>： 匹配行结束符。<br><code>&quot;*&quot;</code>： 匹配0或多个任意字符。</p>
+<p><strong> 请注意：区分您不想被抓取或收录的目录的大小写 </strong></p>
+<h3 id="用法举例"><a href="#用法举例" class="headerlink" title="用法举例"></a>用法举例</h3><ul>
+<li><p>禁止所有</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: * </span><br><span class="line">Disallow: /</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>允许所有</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: </span><br><span class="line">或者</span><br><span class="line">User-agent: *</span><br><span class="line">Allow: /</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>禁止访问特定目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: /cgi-bin/</span><br><span class="line">Disallow: /tmp/</span><br><span class="line">Disallow: /~joe/</span><br></pre></td></tr></table></figure>
+<p>　　在这个例子中，该网站有三个目录对搜索引擎的访问做了限制，即robot不会访问这三个目录。需要注意的是对每一个目录必须分开声明，而不能写成 “Disallow: /cgi-bin/ /tmp/“。</p>
+</li>
+<li><p>允许访问特定目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Allow: /cgi-bin/see</span><br><span class="line">Allow: /tmp/hi</span><br><span class="line">Allow: /~joe/look</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用正则<br>1、使用”*”限制访问url<br>禁止访问 <code>/cgi-bin/</code> 目录下的所有以<code>&quot;.htm&quot;</code>为后缀的URL(包含子目录)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: /cgi-bin/*.htm</span><br></pre></td></tr></table></figure>
+<p>2、使用<code>&quot;$&quot;</code>限制访问url<br>仅允许访问以<code>&quot;.htm&quot;</code>为后缀的URL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Allow: .htm$</span><br><span class="line">Disallow: /</span><br></pre></td></tr></table></figure>
+<p>3、禁止访问网站中所有的动态页面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: /*?*</span><br></pre></td></tr></table></figure>
+<p>4、禁止抓取图片<br>仅允许抓取网页，禁止抓取任何图片。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: .jpg$</span><br><span class="line">Disallow: .jpeg$</span><br><span class="line">Disallow: .gif$</span><br><span class="line">Disallow: .png$</span><br><span class="line">Disallow: .bmp$</span><br></pre></td></tr></table></figure>
+<p>5、允许抓取特定格式的图片<br>允许抓取网页和gif格式图片，不允许抓取其他格式图片</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">User-agent: Baiduspider</span><br><span class="line">Allow: .gif$</span><br><span class="line">Disallow: .jpg$</span><br><span class="line">Disallow: .jpeg$ </span><br><span class="line">Disallow: .png$</span><br><span class="line">Disallow: .bmp$</span><br></pre></td></tr></table></figure>
+<p>6、禁止抓取特定格式的图片</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User-agent: Baiduspider</span><br><span class="line">Disallow: .jpg$</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="网站管理员工具"><a href="#网站管理员工具" class="headerlink" title="网站管理员工具"></a>网站管理员工具</h3><p>Google提供了 <a href="http://www.google.cn/support/webmasters/bin/answer.py?hlrm=en&amp;answer=35237" target="_blank" rel="noopener">robots.txt分析工具</a>。它可以按照 Googlebot 读取 robots.txt 文件的相同方式读取该文件，并且可为 Google user-agents（如 Googlebot）提供结果。我们强烈建议您使用它。</p>
+<h3 id="误区"><a href="#误区" class="headerlink" title="误区"></a>误区</h3><p><em>误区一：我的网站上的所有文件都需要蜘蛛抓取，那我就没必要在添加robots.txt文件了。反正如果该文件不存在，所有的搜索蜘蛛将默认能够访问网站上所有没有被口令保护的页面。</em></p>
+<p>　　每当用户试图访问某个不存在的URL时，服务器都会在日志中记录404错误（无法找到文件）。每当搜索蜘蛛来寻找并不存在的robots.txt文件时，服务器也将在日志中记录一条404错误，所以你应该做网站中添加一个robots.txt。*</p>
+<p><em>误区二：在robots.txt文件中设置所有的文件都可以被搜索蜘蛛抓取，这样可以增加网站的收录率。</em></p>
+<p>　　网站中的程序脚本、样式表等文件即使被蜘蛛收录，也不会增加网站的收录率，还只会浪费服务器资源。因此必须在robots.txt文件里设置不要让搜索蜘蛛索引这些文件。</p>
+<p><em>误区三：搜索蜘蛛抓取网页太浪费服务器资源，在robots.txt文件设置所有的搜索蜘蛛都不能抓取全部的网页。</em></p>
+<p>　　如果这样的话，会导致整个网站不能被搜索引擎收录。</p>
+<h3 id="使用技巧"><a href="#使用技巧" class="headerlink" title="使用技巧"></a>使用技巧</h3><ol>
+<li><p>每当用户试图访问某个不存在的URL时，服务器都会在日志中记录404错误（无法找到文件）。每当搜索蜘蛛来寻找并不存在的robots.txt文件时，服务器也将在日志中记录一条404错误，所以你应该在网站中添加一个robots.txt。</p>
+</li>
+<li><p>网站管理员必须使蜘蛛程序远离某些服务器上的目录 —— 保证服务器性能。比如：大多数网站服务器都有程序储存在“cgi-bin”目录下，因此在robots.txt文件中加入“Disallow: /cgi-bin”是个好主意，这样能够避免将所有程序文件被蜘蛛索引，可以节省服务器资源。一般网站中不需要蜘蛛抓取的文件有：后台管理文件、程序脚本、附件、数据库文件、编码文件、样式表文件、模板文件、导航图片和背景图片等等。</p>
+</li>
+<li><p>如果你的网站是动态网页，并且你为这些动态网页创建了静态副本，以供搜索蜘蛛更容易抓取。那么你需要在robots.txt文件里设置避免动态网页被蜘蛛索引，以保证这些网页不会被视为含重复内容。</p>
+</li>
+<li><p>robots.txt文件里还可以直接包括在sitemap文件的链接。就像这样：<br>   Sitemap: sitemap.xml<br>   　　目前对此表示支持的搜索引擎公司有Google, Yahoo, Ask and MSN。而中文搜索引擎公司，显然不在这个圈子内。这样做的好处就是，站长不用到每个搜索引擎的站长工具或者相似的站长部分，去提交自己的sitemap文件，搜索引擎的蜘蛛自己就会抓取robots.txt文件，读取其中的sitemap路径，接着抓取其中相链接的网页。</p>
+</li>
+<li>合理使用robots.txt文件还能避免访问时出错。比如，不能让搜索者直接进入购物车页面。因为没有理由使购物车被收录，所以你可以在robots.txt文件里设置来阻止搜索者直接进入购物车页面。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/搜索引擎/" rel="tag"># 搜索引擎</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/07/travis-ci-hexo/" rel="next" title="Travis CI自动持续化部署博客">
+                <i class="fa fa-chevron-left"></i> Travis CI自动持续化部署博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/10/zepto-ajax/" rel="prev" title="Zepto.js全局设置headers">
+                Zepto.js全局设置headers <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jeskinfly">
+          <p class="site-author-name" itemprop="name">Jeskinfly</p>
+           
+              <p class="site-description motion-element" itemprop="description">Jeskinfly's blog</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeskinfly" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是robots-txt文件"><span class="nav-number">1.</span> <span class="nav-text">什么是robots.txt文件?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#robots-txt文件放在哪里"><span class="nav-number">2.</span> <span class="nav-text">robots.txt文件放在哪里?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#meta标签"><span class="nav-number">3.</span> <span class="nav-text">meta标签</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">3.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何禁止跟踪网页的链接，而只对网页建索引？"><span class="nav-number">3.2.</span> <span class="nav-text">如何禁止跟踪网页的链接，而只对网页建索引？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何禁止在搜索结果中显示网页快照，而只对网页建索引？"><span class="nav-number">3.3.</span> <span class="nav-text">如何禁止在搜索结果中显示网页快照，而只对网页建索引？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#robots-txt文件的格式"><span class="nav-number">4.</span> <span class="nav-text">robots.txt文件的格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注释"><span class="nav-number">4.1.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#User-agent"><span class="nav-number">4.2.</span> <span class="nav-text">User-agent:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Disallow"><span class="nav-number">4.3.</span> <span class="nav-text">Disallow:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Allow"><span class="nav-number">4.4.</span> <span class="nav-text">Allow:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-“-“-和-“-”-："><span class="nav-number">4.5.</span> <span class="nav-text">使用 “*“ 和 “$” ：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用法举例"><span class="nav-number">5.</span> <span class="nav-text">用法举例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网站管理员工具"><span class="nav-number">6.</span> <span class="nav-text">网站管理员工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#误区"><span class="nav-number">7.</span> <span class="nav-text">误区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用技巧"><span class="nav-number">8.</span> <span class="nav-text">使用技巧</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeskinfly</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("NgrincGO5vNowsOLnXvEQhGl-gzGzoHsz", "kl25hoEbMW7A45RI4vdx2l1U");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

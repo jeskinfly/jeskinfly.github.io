@@ -1,0 +1,1082 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="PHP,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="前言 　　PHP的 MD5，SHA1 以及 SHA256 这样的散列算法是面向快速、高效 进行散列处理而设计的。随着技术进步和计算机硬件的提升， 破解者可以使用“暴力”方式来寻找散列码 所对应的原始数据。　　因为现代化计算机可以快速的“反转”上述散列算法的散列值， 所以很多安全专家都强烈建议 不要在密码散列中使用这些散列算法**。">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="密码散列">
+<meta property="og:url" content="http://blog.mealive.cn/2017/07/31/php-Hash/index.html">
+<meta property="og:site_name" content="Jeskinfly&#39;s blog">
+<meta property="og:description" content="前言 　　PHP的 MD5，SHA1 以及 SHA256 这样的散列算法是面向快速、高效 进行散列处理而设计的。随着技术进步和计算机硬件的提升， 破解者可以使用“暴力”方式来寻找散列码 所对应的原始数据。　　因为现代化计算机可以快速的“反转”上述散列算法的散列值， 所以很多安全专家都强烈建议 不要在密码散列中使用这些散列算法**。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.mealive.cn/images/0af3dc557de5198c4312d2c38c08fbf0-crypt-text-rendered.svg">
+<meta property="og:updated_time" content="2020-01-08T07:09:13.596Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="密码散列">
+<meta name="twitter:description" content="前言 　　PHP的 MD5，SHA1 以及 SHA256 这样的散列算法是面向快速、高效 进行散列处理而设计的。随着技术进步和计算机硬件的提升， 破解者可以使用“暴力”方式来寻找散列码 所对应的原始数据。　　因为现代化计算机可以快速的“反转”上述散列算法的散列值， 所以很多安全专家都强烈建议 不要在密码散列中使用这些散列算法**。">
+<meta name="twitter:image" content="http://blog.mealive.cn/images/0af3dc557de5198c4312d2c38c08fbf0-crypt-text-rendered.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.mealive.cn/2017/07/31/php-Hash/">
+
+
+
+
+
+  <title> 密码散列 | Jeskinfly's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jeskinfly's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活本是阳光的，不要失去她原本的色彩</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.mealive.cn/2017/07/31/php-Hash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jeskinfly">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jeskinfly's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                密码散列
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T11:42:32+00:00">
+                2017-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PHP/加密/" itemprop="url" rel="index">
+                    <span itemprop="name">加密</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/07/31/php-Hash/" class="leancloud_visitors" data-flag-title="密码散列">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>　　PHP的 <code>MD5</code>，<code>SHA1</code> 以及 <code>SHA256</code> 这样的散列算法是面向快速、高效 进行散列处理而设计的。随着技术进步和计算机硬件的提升， 破解者可以使用“暴力”方式来寻找散列码 所对应的原始数据。<br>　　因为现代化计算机可以快速的“反转”上述散列算法的散列值， 所以很多安全专家都强烈建议 <strong>不要在密码散列中使用这些散列算法**</strong>。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="如何对密码进行散列处理？"><a href="#如何对密码进行散列处理？" class="headerlink" title="如何对密码进行散列处理？"></a>如何对密码进行散列处理？</h3><p>　　当进行密码散列处理的时候，有两个必须考虑的因素： 计算量以及“盐”。 散列算法的计算量越大， 暴力破解所需的时间就越长。<br>　　<code>PHP 5.5</code> 提供了 <strong><a href="http://php.net/manual/zh/book.password.php" target="_blank" rel="noopener">一个原生密码散列 API</a></strong>， 它提供一种安全的方式来完成密码 <strong><a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener">散列</a></strong>和 <strong><a href="http://php.net/manual/zh/function.password-verify.php" target="_blank" rel="noopener">验证</a></strong>。 <code>PHP 5.3.7</code> 及后续版本中都提供了一个 <strong><a href="https://github.com/ircmaxell/password_compat" target="_blank" rel="noopener">» 纯 PHP 的兼容库</a></strong>。<br>　　<a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash()</code></a> 是 <strong>crypt()</strong> 的一个简单封装，采用 <strong>Blowfish算法</strong> ，并且完全与现有的密码哈希兼容。推荐使用 <strong><a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash()</code></a></strong> 。</p>
+<ul>
+<li>时序攻击</li>
+</ul>
+<p>　　如果使用 <a href="http://php.net/manual/zh/function.crypt.php" target="_blank" rel="noopener"><code>crypt()</code></a> 函数来进行密码验证， 那么你需要选择一种耗时恒定的字符串比较算法来避免时序攻击。 （译注：就是说，字符串比较所消耗的时间恒定， 不随输入数据的多少变化而变化） PHP 中的 <a href="http://php.net/manual/zh/language.operators.comparison.php" target="_blank" rel="noopener"><code>==</code> 和 <code>===</code> 操作符</a> 和 <a href="http://php.net/manual/zh/function.strcmp.php" target="_blank" rel="noopener"><code>strcmp()</code></a> 函数都不是耗时恒定的字符串比较，但是 <strong><a href="http://php.net/manual/zh/function.password-verify.php" target="_blank" rel="noopener"><code>password_verify()</code></a></strong>  可以帮你完成这项工作。</p>
+<ul>
+<li>加盐</li>
+</ul>
+<p>　　“加盐”是指在进行散列处理的过程中 加入的一些数据，用来避免从已计算的散列值表 （被称作<strong>“彩虹表”</strong>）中 对比输出数据从而获取明文密码的风险。<br>　　如果不提供“盐”，<a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash()</code></a> 函数会随机生成“盐”。 非常简单，行之有效。</p>
+<ul>
+<li>验证</li>
+</ul>
+<p>　　PHP当使用 <a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash()</code></a> 或者 <a href="http://php.net/manual/zh/function.crypt.php" target="_blank" rel="noopener"><code>crypt()</code></a> 函数时， “盐”会被作为生成的散列值的一部分返回。 你可以直接把完整的返回值存储到数据库中， 因为这个返回值中已经包含了足够的信息， 可以直接用在 <a href="http://php.net/manual/zh/function.password-verify.php" target="_blank" rel="noopener"><code>password_verify()</code></a> 或 <a href="http://php.net/manual/zh/function.crypt.php" target="_blank" rel="noopener"><code>crypt()</code></a> 函数来进行密码验证。</p>
+<p>　　下图展示了 <a href="http://php.net/manual/zh/function.crypt.php" target="_blank" rel="noopener"><code>crypt()</code></a> 或 <a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash()</code></a> 函数返回值的结构。 如你所见，算法的信息以及“盐”都已经包含在返回值中， 在后续的密码验证中将会用到这些信息。</p>
+<p><img src="/images/0af3dc557de5198c4312d2c38c08fbf0-crypt-text-rendered.svg" alt></p>
+<h3 id="原生密码散列-API"><a href="#原生密码散列-API" class="headerlink" title="原生密码散列 API"></a>原生密码散列 API</h3><p><strong>密码散列算法函数</strong></p>
+<ul>
+<li><a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash</code></a> — 创建密码的哈希（hash）</li>
+<li><a href="http://php.net/manual/zh/function.password-needs-rehash.php" target="_blank" rel="noopener"><code>password_needs_rehash</code></a> — Checks if the given hash matches the given options</li>
+<li><a href="http://php.net/manual/zh/function.password-verify.php" target="_blank" rel="noopener"><code>password_verify</code></a> — 验证密码是否和哈希匹配</li>
+</ul>
+<blockquote>
+<p><a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash()</code></a> 使用了一个强的哈希算法，来产生足够强的盐值，并且会自动进行合适的轮次。<br><strong>Note</strong>: 由于 <strong><code>crypt()</code></strong> 使用的是单向算法，因此不存在 <code>decrypt</code> 函数。</p>
+</blockquote>
+<h4 id="password-hash"><a href="#password-hash" class="headerlink" title="password_hash"></a><font size="4">password_hash</font></h4><p><font size="1">(PHP 5 &gt;= 5.5.0, PHP 7)</font><br>password_hash — 创建密码的哈希（hash）<br><code>string  password_hash ( string $password , integer $algo [, array $options ] ) </code></p>
+<p><code>$password</code> :</p>
+<blockquote>
+<p>用户的密码。<br><strong>注意</strong>： 使用 <code>PASSWORD_BCRYPT</code> 做算法，将使 <code>password</code> 参数最长为72个字符，超过会被截断。</p>
+</blockquote>
+<p><code>$algo</code> :</p>
+<blockquote>
+<p>支持的算法 :</p>
+<ul>
+<li><strong><code>PASSWORD_DEFAULT</code></strong> - 使用 <code>bcrypt 算法</code> (<code>PHP 5.5.0</code> 默认)。<br>   <strong>注意</strong>，该常量会随着 PHP 加入更新更高强度的算法而改变。所以，使用此常量生成结果的长度将在未来有变化。 因此，数据库里储存结果的列可超过<code>60</code>个字符（最好是<code>255</code>个字符）。</li>
+<li><strong><code>PASSWORD_BCRYPT</code></strong> - 使用 <strong><code>CRYPT_BLOWFISH</code></strong> 算法创建哈希。<br>  这会产生兼容使用 <code>&quot;$2y$&quot;</code> 的 <a href="http://php.net/manual/zh/function.crypt.php" target="_blank" rel="noopener"><code>crypt()</code></a>。 结果将会是 <code>60</code> 个字符的字符串， 或者在失败时返回 <strong><code>FALSE</code></strong> 。默认算法。</li>
+</ul>
+</blockquote>
+<p><code>$options:</code></p>
+<blockquote>
+<p>支持的选项：</p>
+<ul>
+<li><code>salt</code> - 在散列密码时加的盐（干扰字符串）。<br>省略此值后，<strong><code>password_hash()</code></strong> 会为每个密码哈希自动生成随机的盐值。强烈建议不要自己为这个函数生成盐值（<code>salt</code>）。只要不设置，它会自动创建安全的盐值。<br><strong>盐值（<code>salt</code>）选项从 PHP <code>7.0.0</code> 开始被废弃（deprecated）了。 现在最好选择简单的使用默认产生的盐值。</strong></li>
+<li><code>cost</code> - 用来指明算法递归的层数。默认值是 10。</li>
+</ul>
+</blockquote>
+<h4 id="password-verify"><a href="#password-verify" class="headerlink" title="password_verify"></a><font size="4">password_verify</font></h4><p><font size="1">(PHP 5 &gt;= 5.5.0, PHP 7)</font><br>password_verify — 验证密码是否和哈希匹配<br><code>boolean password_verify ( string $password , string $hash )</code></p>
+<p><code>$password:</code></p>
+<blockquote>
+<p>用户的密码。使用hash算法加密前的原始密码。</p>
+</blockquote>
+<p><code>$hash</code></p>
+<blockquote>
+<p>一个由 <a href="http://php.net/manual/zh/function.password-hash.php" target="_blank" rel="noopener"><code>password_hash()</code></a> 创建的散列值。</p>
+</blockquote>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><h4 id="password-needs-rehash"><a href="#password-needs-rehash" class="headerlink" title="password_needs_rehash"></a><font size="4">password_needs_rehash</font></h4><p>加强安全性，如何在验证密码后更新hash密码？。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$password = <span class="string">'rasmuslerdorf'</span>;</span><br><span class="line">$hash = <span class="string">'$2y$10$YCFsG6elYca568hBi2pZ0.3LDL5wjgxct1N8w/oLR/jfHsiQwCqTS'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// The cost parameter can change over time as hardware improves</span></span><br><span class="line">$options = <span class="keyword">array</span>(<span class="string">'cost'</span> =&gt; <span class="number">11</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Verify stored hash against plain-text password</span></span><br><span class="line"><span class="keyword">if</span> (password_verify($password, $hash)) &#123;</span><br><span class="line">	<span class="comment">// Check if a newer hashing algorithm is available</span></span><br><span class="line">	<span class="comment">// or the cost has changed</span></span><br><span class="line">	<span class="keyword">if</span> (password_needs_rehash($hash, PASSWORD_DEFAULT, $options)) &#123;</span><br><span class="line">		<span class="comment">// If so, create a new hash, and replace the old one</span></span><br><span class="line">		$newHash = password_hash($password, PASSWORD_DEFAULT, $options);</span><br><span class="line">		<span class="comment">// <span class="doctag">todo:</span> store newHash to database </span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Log user in</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="纯-PHP-的兼容库"><a href="#纯-PHP-的兼容库" class="headerlink" title="纯 PHP 的兼容库"></a><a href="https://github.com/ircmaxell/password_compat" target="_blank" rel="noopener">纯 PHP 的兼容库</a></h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * A Compatibility library with PHP 5.5's simplified password hashing API.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Anthony Ferrara &lt;ircmaxell<span class="doctag">@php</span>.net&gt;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@license</span> http://www.opensource.org/licenses/mit-license.html MIT License</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@copyright</span> 2012 The Authors</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">namespace</span> &#123;</span><br><span class="line">	if (!defined('PASSWORD_BCRYPT')) &#123;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * PHPUnit Process isolation caches constants, but not function declarations.</span></span><br><span class="line"><span class="comment">		 * So we need to check if the constants are defined separately from </span></span><br><span class="line"><span class="comment">		 * the functions to enable supporting process isolation in userland</span></span><br><span class="line"><span class="comment">		 * code.</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		define(<span class="string">'PASSWORD_BCRYPT'</span>, <span class="number">1</span>);</span><br><span class="line">		define(<span class="string">'PASSWORD_DEFAULT'</span>, PASSWORD_BCRYPT);</span><br><span class="line">		define(<span class="string">'PASSWORD_BCRYPT_DEFAULT_COST'</span>, <span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (!function_exists(<span class="string">'password_hash'</span>)) &#123;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Hash the password using the specified algorithm</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> string $password The password to hash</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> int    $algo     The algorithm to use (Defined by PASSWORD_* constants)</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> array  $options  The options for the algorithm to use</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@return</span> string|false The hashed password, or false on error.</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">password_hash</span><span class="params">($password, $algo, array $options = array<span class="params">()</span>)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (!function_exists(<span class="string">'crypt'</span>)) &#123;</span><br><span class="line">				trigger_error(<span class="string">"Crypt must be loaded for password_hash to function"</span>, E_USER_WARNING);</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (is_null($password) || is_int($password)) &#123;</span><br><span class="line">				$password = (string) $password;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (!is_string($password)) &#123;</span><br><span class="line">				trigger_error(<span class="string">"password_hash(): Password must be a string"</span>, E_USER_WARNING);</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (!is_int($algo)) &#123;</span><br><span class="line">				trigger_error(<span class="string">"password_hash() expects parameter 2 to be long, "</span> . gettype($algo) . <span class="string">" given"</span>, E_USER_WARNING);</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			$resultLength = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">switch</span> ($algo) &#123;</span><br><span class="line">				<span class="keyword">case</span> PASSWORD_BCRYPT:</span><br><span class="line">					$cost = PASSWORD_BCRYPT_DEFAULT_COST;</span><br><span class="line">					<span class="keyword">if</span> (<span class="keyword">isset</span>($options[<span class="string">'cost'</span>])) &#123;</span><br><span class="line">						$cost = (int) $options[<span class="string">'cost'</span>];</span><br><span class="line">						<span class="keyword">if</span> ($cost &lt; <span class="number">4</span> || $cost &gt; <span class="number">31</span>) &#123;</span><br><span class="line">							trigger_error(sprintf(<span class="string">"password_hash(): Invalid bcrypt cost parameter specified: %d"</span>, $cost), E_USER_WARNING);</span><br><span class="line">							<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="comment">// The length of salt to generate</span></span><br><span class="line">					$raw_salt_len = <span class="number">16</span>;</span><br><span class="line">					<span class="comment">// The length required in the final serialization</span></span><br><span class="line">					$required_salt_len = <span class="number">22</span>;</span><br><span class="line">					$hash_format = sprintf(<span class="string">"$2y$%02d$"</span>, $cost);</span><br><span class="line">					<span class="comment">// The expected length of the final crypt() output</span></span><br><span class="line">					$resultLength = <span class="number">60</span>;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">default</span>:</span><br><span class="line">					trigger_error(sprintf(<span class="string">"password_hash(): Unknown password hashing algorithm: %s"</span>, $algo), E_USER_WARNING);</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			$salt_req_encoding = <span class="keyword">false</span>;</span><br><span class="line">			<span class="keyword">if</span> (<span class="keyword">isset</span>($options[<span class="string">'salt'</span>])) &#123;</span><br><span class="line">				<span class="keyword">switch</span> (gettype($options[<span class="string">'salt'</span>])) &#123;</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'NULL'</span>:</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'boolean'</span>:</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'integer'</span>:</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'double'</span>:</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'string'</span>:</span><br><span class="line">						$salt = (string) $options[<span class="string">'salt'</span>];</span><br><span class="line">						<span class="keyword">break</span>;</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'object'</span>:</span><br><span class="line">						<span class="keyword">if</span> (method_exists($options[<span class="string">'salt'</span>], <span class="string">'__tostring'</span>)) &#123;</span><br><span class="line">							$salt = (string) $options[<span class="string">'salt'</span>];</span><br><span class="line">							<span class="keyword">break</span>;</span><br><span class="line">						&#125;</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'array'</span>:</span><br><span class="line">					<span class="keyword">case</span> <span class="string">'resource'</span>:</span><br><span class="line">					<span class="keyword">default</span>:</span><br><span class="line">						trigger_error(<span class="string">'password_hash(): Non-string salt parameter supplied'</span>, E_USER_WARNING);</span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (PasswordCompat\binary\_strlen($salt) &lt; $required_salt_len) &#123;</span><br><span class="line">					trigger_error(sprintf(<span class="string">"password_hash(): Provided salt is too short: %d expecting %d"</span>, PasswordCompat\binary\_strlen($salt), $required_salt_len), E_USER_WARNING);</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">				&#125; <span class="keyword">elseif</span> (<span class="number">0</span> == preg_match(<span class="string">'#^[a-zA-Z0-9./]+$#D'</span>, $salt)) &#123;</span><br><span class="line">					$salt_req_encoding = <span class="keyword">true</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				$buffer = <span class="string">''</span>;</span><br><span class="line">				$buffer_valid = <span class="keyword">false</span>;</span><br><span class="line">				<span class="keyword">if</span> (function_exists(<span class="string">'mcrypt_create_iv'</span>) &amp;&amp; !defined(<span class="string">'PHALANGER'</span>)) &#123;</span><br><span class="line">					$buffer = mcrypt_create_iv($raw_salt_len, MCRYPT_DEV_URANDOM);</span><br><span class="line">					<span class="keyword">if</span> ($buffer) &#123;</span><br><span class="line">						$buffer_valid = <span class="keyword">true</span>;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (!$buffer_valid &amp;&amp; function_exists(<span class="string">'openssl_random_pseudo_bytes'</span>)) &#123;</span><br><span class="line">					$strong = <span class="keyword">false</span>;</span><br><span class="line">					$buffer = openssl_random_pseudo_bytes($raw_salt_len, $strong);</span><br><span class="line">					<span class="keyword">if</span> ($buffer &amp;&amp; $strong) &#123;</span><br><span class="line">						$buffer_valid = <span class="keyword">true</span>;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (!$buffer_valid &amp;&amp; @is_readable(<span class="string">'/dev/urandom'</span>)) &#123;</span><br><span class="line">					$file = fopen(<span class="string">'/dev/urandom'</span>, <span class="string">'r'</span>);</span><br><span class="line">					$read = <span class="number">0</span>;</span><br><span class="line">					$local_buffer = <span class="string">''</span>;</span><br><span class="line">					<span class="keyword">while</span> ($read &lt; $raw_salt_len) &#123;</span><br><span class="line">						$local_buffer .= fread($file, $raw_salt_len - $read);</span><br><span class="line">						$read = PasswordCompat\binary\_strlen($local_buffer);</span><br><span class="line">					&#125;</span><br><span class="line">					fclose($file);</span><br><span class="line">					<span class="keyword">if</span> ($read &gt;= $raw_salt_len) &#123;</span><br><span class="line">						$buffer_valid = <span class="keyword">true</span>;</span><br><span class="line">					&#125;</span><br><span class="line">					$buffer = str_pad($buffer, $raw_salt_len, <span class="string">"\0"</span>) ^ str_pad($local_buffer, $raw_salt_len, <span class="string">"\0"</span>);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (!$buffer_valid || PasswordCompat\binary\_strlen($buffer) &lt; $raw_salt_len) &#123;</span><br><span class="line">					$buffer_length = PasswordCompat\binary\_strlen($buffer);</span><br><span class="line">					<span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $raw_salt_len; $i++) &#123;</span><br><span class="line">						<span class="keyword">if</span> ($i &lt; $buffer_length) &#123;</span><br><span class="line">							$buffer[$i] = $buffer[$i] ^ chr(mt_rand(<span class="number">0</span>, <span class="number">255</span>));</span><br><span class="line">						&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">							$buffer .= chr(mt_rand(<span class="number">0</span>, <span class="number">255</span>));</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				$salt = $buffer;</span><br><span class="line">				$salt_req_encoding = <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> ($salt_req_encoding) &#123;</span><br><span class="line">				<span class="comment">// encode string with the Base64 variant used by crypt</span></span><br><span class="line">				$base64_digits =</span><br><span class="line">					<span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'</span>;</span><br><span class="line">				$bcrypt64_digits =</span><br><span class="line">					<span class="string">'./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'</span>;</span><br><span class="line">				$base64_string = base64_encode($salt);</span><br><span class="line">				$salt = strtr(rtrim($base64_string, <span class="string">'='</span>), $base64_digits, $bcrypt64_digits);</span><br><span class="line">			&#125;</span><br><span class="line">			$salt = PasswordCompat\binary\_substr($salt, <span class="number">0</span>, $required_salt_len);</span><br><span class="line">			$hash = $hash_format . $salt;</span><br><span class="line">			$ret = crypt($password, $hash);</span><br><span class="line">			<span class="keyword">if</span> (!is_string($ret) || PasswordCompat\binary\_strlen($ret) != $resultLength) &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> $ret;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Get information about the password hash. Returns an array of the information</span></span><br><span class="line"><span class="comment">		 * that was used to generate the password hash.</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * array(</span></span><br><span class="line"><span class="comment">		 *    'algo' =&gt; 1,</span></span><br><span class="line"><span class="comment">		 *    'algoName' =&gt; 'bcrypt',</span></span><br><span class="line"><span class="comment">		 *    'options' =&gt; array(</span></span><br><span class="line"><span class="comment">		 *        'cost' =&gt; PASSWORD_BCRYPT_DEFAULT_COST,</span></span><br><span class="line"><span class="comment">		 *    ),</span></span><br><span class="line"><span class="comment">		 * )</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> string $hash The password hash to extract info from</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@return</span> array The array of information about the hash.</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">password_get_info</span><span class="params">($hash)</span> </span>&#123;</span><br><span class="line">			$return = <span class="keyword">array</span>(</span><br><span class="line">				<span class="string">'algo'</span> =&gt; <span class="number">0</span>,</span><br><span class="line">				<span class="string">'algoName'</span> =&gt; <span class="string">'unknown'</span>,</span><br><span class="line">				<span class="string">'options'</span> =&gt; <span class="keyword">array</span>(),</span><br><span class="line">			);</span><br><span class="line">			<span class="keyword">if</span> (PasswordCompat\binary\_substr($hash, <span class="number">0</span>, <span class="number">4</span>) == <span class="string">'$2y$'</span> &amp;&amp; PasswordCompat\binary\_strlen($hash) == <span class="number">60</span>) &#123;</span><br><span class="line">				$return[<span class="string">'algo'</span>] = PASSWORD_BCRYPT;</span><br><span class="line">				$return[<span class="string">'algoName'</span>] = <span class="string">'bcrypt'</span>;</span><br><span class="line">				<span class="keyword">list</span>($cost) = sscanf($hash, <span class="string">"$2y$%d$"</span>);</span><br><span class="line">				$return[<span class="string">'options'</span>][<span class="string">'cost'</span>] = $cost;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> $return;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Determine if the password hash needs to be rehashed according to the options provided</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * If the answer is true, after validating the password using password_verify, rehash it.</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> string $hash    The hash to test</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> int    $algo    The algorithm used for new password hashes</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> array  $options The options array passed to password_hash</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@return</span> boolean True if the password needs to be rehashed.</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">password_needs_rehash</span><span class="params">($hash, $algo, array $options = array<span class="params">()</span>)</span> </span>&#123;</span><br><span class="line">			$info = password_get_info($hash);</span><br><span class="line">			<span class="keyword">if</span> ($info[<span class="string">'algo'</span>] !== (int) $algo) &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">switch</span> ($algo) &#123;</span><br><span class="line">				<span class="keyword">case</span> PASSWORD_BCRYPT:</span><br><span class="line">					$cost = <span class="keyword">isset</span>($options[<span class="string">'cost'</span>]) ? (int) $options[<span class="string">'cost'</span>] : PASSWORD_BCRYPT_DEFAULT_COST;</span><br><span class="line">					<span class="keyword">if</span> ($cost !== $info[<span class="string">'options'</span>][<span class="string">'cost'</span>]) &#123;</span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Verify a password against a hash using a timing attack resistant approach</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> string $password The password to verify</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> string $hash     The hash to verify against</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@return</span> boolean If the password matches the hash</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">password_verify</span><span class="params">($password, $hash)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (!function_exists(<span class="string">'crypt'</span>)) &#123;</span><br><span class="line">				trigger_error(<span class="string">"Crypt must be loaded for password_verify to function"</span>, E_USER_WARNING);</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			$ret = crypt($password, $hash);</span><br><span class="line">			<span class="keyword">if</span> (!is_string($ret) || PasswordCompat\binary\_strlen($ret) != PasswordCompat\binary\_strlen($hash) || PasswordCompat\binary\_strlen($ret) &lt;= <span class="number">13</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			$status = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; PasswordCompat\binary\_strlen($ret); $i++) &#123;</span><br><span class="line">				$status |= (ord($ret[$i]) ^ ord($hash[$i]));</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> $status === <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">PasswordCompat</span>\<span class="title">binary</span> &#123;</span><br><span class="line">	if (!function_exists('PasswordCompat\\binary\\_strlen')) &#123;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Count the number of bytes in a string</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * We cannot simply use strlen() for this, because it might be overwritten by the mbstring extension.</span></span><br><span class="line"><span class="comment">		 * In this case, strlen() will count the number of *characters* based on the internal encoding. A</span></span><br><span class="line"><span class="comment">		 * sequence of bytes might be regarded as a single multibyte character.</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> string $binary_string The input string</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@internal</span></span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@return</span> int The number of bytes</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">_strlen</span><span class="params">($binary_string)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (function_exists(<span class="string">'mb_strlen'</span>)) &#123;</span><br><span class="line">				<span class="keyword">return</span> mb_strlen($binary_string, <span class="string">'8bit'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> strlen($binary_string);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Get a substring based on byte limits</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@see</span> _strlen()</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> string $binary_string The input string</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> int    $start</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@param</span> int    $length</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@internal</span></span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@return</span> string The substring</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">_substr</span><span class="params">($binary_string, $start, $length)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (function_exists(<span class="string">'mb_substr'</span>)) &#123;</span><br><span class="line">				<span class="keyword">return</span> mb_substr($binary_string, $start, $length, <span class="string">'8bit'</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> substr($binary_string, $start, $length);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		 * Check if current PHP version is compatible with the library</span></span><br><span class="line"><span class="comment">		 *</span></span><br><span class="line"><span class="comment">		 * <span class="doctag">@return</span> boolean the check result</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		<span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">static</span> $pass = <span class="keyword">NULL</span>;</span><br><span class="line">			<span class="keyword">if</span> (is_null($pass)) &#123;</span><br><span class="line">				<span class="keyword">if</span> (function_exists(<span class="string">'crypt'</span>)) &#123;</span><br><span class="line">					$hash = <span class="string">'$2y$04$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG'</span>;</span><br><span class="line">					$test = crypt(<span class="string">"password"</span>, $hash);</span><br><span class="line">					$pass = $test == $hash;</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					$pass = <span class="keyword">false</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> $pass;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="合适的-cost-值"><a href="#合适的-cost-值" class="headerlink" title="合适的 cost 值"></a>合适的 cost 值</h4><p>在交互的系统上，推荐在自己的服务器上测试此函数，调整 cost 参数直至函数时间开销小于 100 毫秒（milliseconds）</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这个例子对服务器做了基准测试（benchmark），检测服务器能承受多高的 cost</span></span><br><span class="line"><span class="comment"> * 在不明显拖慢服务器的情况下可以设置最高的值</span></span><br><span class="line"><span class="comment"> * 8-10 是个不错的底线，在服务器够快的情况下，越高越好。</span></span><br><span class="line"><span class="comment"> * 以下代码目标为  ≤ 50 毫秒（milliseconds），</span></span><br><span class="line"><span class="comment"> * 适合系统处理交互登录。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">$timeTarget = <span class="number">0.05</span>; <span class="comment">// 50 毫秒（milliseconds） </span></span><br><span class="line"></span><br><span class="line">$cost = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">	$cost++;</span><br><span class="line">	$start = microtime(<span class="keyword">true</span>);</span><br><span class="line">	password_hash(<span class="string">"test"</span>, PASSWORD_BCRYPT, [<span class="string">"cost"</span> =&gt; $cost]);</span><br><span class="line">	$end = microtime(<span class="keyword">true</span>);</span><br><span class="line">&#125; <span class="keyword">while</span> (($end - $start) &lt; $timeTarget);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">"Appropriate Cost Found: "</span> . $cost . <span class="string">"\n"</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="手动设置盐值"><a href="#手动设置盐值" class="headerlink" title="手动设置盐值"></a>手动设置盐值</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 注意，这里的盐值是随机产生的。</span></span><br><span class="line"><span class="comment"> * 永远都不要使用固定盐值，或者不是随机生成的盐值。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 绝大多数情况下，可以让 password_hash generate 为你自动产生随机盐值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">$options = [</span><br><span class="line">	<span class="string">'cost'</span> =&gt; <span class="number">11</span>,</span><br><span class="line">	<span class="comment">// &lt;=7.1.0    mcrypt_create_iv;</span></span><br><span class="line">	<span class="comment">// &gt; 7.1.0    random_bytes();</span></span><br><span class="line">	<span class="string">'salt'</span> =&gt; bin2hex(mcrypt_create_iv(<span class="number">22</span>, MCRYPT_DEV_URANDOM)),</span><br><span class="line">];</span><br><span class="line"><span class="keyword">echo</span> password_hash(<span class="string">"rasmuslerdorf"</span>, PASSWORD_BCRYPT, $options).<span class="string">"\n"</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/28/javacript-style-guide/" rel="next" title="合理编写JavaScript">
+                <i class="fa fa-chevron-left"></i> 合理编写JavaScript
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/31/laravel-homestead/" rel="prev" title="laravel安装homestead要注意的几个问题">
+                laravel安装homestead要注意的几个问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jeskinfly">
+          <p class="site-author-name" itemprop="name">Jeskinfly</p>
+           
+              <p class="site-description motion-element" itemprop="description">Jeskinfly's blog</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeskinfly" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何对密码进行散列处理？"><span class="nav-number">2.</span> <span class="nav-text">如何对密码进行散列处理？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原生密码散列-API"><span class="nav-number">3.</span> <span class="nav-text">原生密码散列 API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#password-hash"><span class="nav-number">3.1.</span> <span class="nav-text">password_hash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#password-verify"><span class="nav-number">3.2.</span> <span class="nav-text">password_verify</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#password-needs-rehash"><span class="nav-number">4.1.</span> <span class="nav-text">password_needs_rehash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纯-PHP-的兼容库"><span class="nav-number">4.2.</span> <span class="nav-text">纯 PHP 的兼容库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合适的-cost-值"><span class="nav-number">4.3.</span> <span class="nav-text">合适的 cost 值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#手动设置盐值"><span class="nav-number">4.4.</span> <span class="nav-text">手动设置盐值</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeskinfly</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("NgrincGO5vNowsOLnXvEQhGl-gzGzoHsz", "kl25hoEbMW7A45RI4vdx2l1U");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

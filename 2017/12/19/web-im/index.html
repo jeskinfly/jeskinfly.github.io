@@ -1,0 +1,1065 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="IM,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="web 的通信方式　　浏览器和我们桌面应用的工作方式是不同的，桌面应用通过socket和远程主机上另外一端的一个进程建立TCP连接，从而达到全双工的即时通信。浏览器是客户端请求服务器，服务器返回结果的模式。浏览器要想实现两个客户端的通信，必然要通过服务器进行信息的转发。例如A要和B通信，则应该是A先把信息发送给IM应用服务器，服务器根据A信息中携带的接收者将它再转发给B，同样B到A也是这种模式，如">
+<meta name="keywords" content="IM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过web实现IM功能">
+<meta property="og:url" content="http://blog.mealive.cn/2017/12/19/web-im/index.html">
+<meta property="og:site_name" content="Jeskinfly&#39;s blog">
+<meta property="og:description" content="web 的通信方式　　浏览器和我们桌面应用的工作方式是不同的，桌面应用通过socket和远程主机上另外一端的一个进程建立TCP连接，从而达到全双工的即时通信。浏览器是客户端请求服务器，服务器返回结果的模式。浏览器要想实现两个客户端的通信，必然要通过服务器进行信息的转发。例如A要和B通信，则应该是A先把信息发送给IM应用服务器，服务器根据A信息中携带的接收者将它再转发给B，同样B到A也是这种模式，如">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://blog.mealive.cn/images/191409262329047.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191446187483346.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191504150763288.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191541195298304.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191558011238845.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191631319359663.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191724033739549.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191754118102961.png">
+<meta property="og:image" content="http://blog.mealive.cn/images/191754557634399.png">
+<meta property="og:updated_time" content="2020-01-08T07:09:13.596Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过web实现IM功能">
+<meta name="twitter:description" content="web 的通信方式　　浏览器和我们桌面应用的工作方式是不同的，桌面应用通过socket和远程主机上另外一端的一个进程建立TCP连接，从而达到全双工的即时通信。浏览器是客户端请求服务器，服务器返回结果的模式。浏览器要想实现两个客户端的通信，必然要通过服务器进行信息的转发。例如A要和B通信，则应该是A先把信息发送给IM应用服务器，服务器根据A信息中携带的接收者将它再转发给B，同样B到A也是这种模式，如">
+<meta name="twitter:image" content="http://blog.mealive.cn/images/191409262329047.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.mealive.cn/2017/12/19/web-im/">
+
+
+
+
+
+  <title> 通过web实现IM功能 | Jeskinfly's blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jeskinfly's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活本是阳光的，不要失去她原本的色彩</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.mealive.cn/2017/12/19/web-im/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jeskinfly">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jeskinfly's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                通过web实现IM功能
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-19T15:29:51+00:00">
+                2017-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/12/19/web-im/" class="leancloud_visitors" data-flag-title="通过web实现IM功能">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="web-的通信方式"><a href="#web-的通信方式" class="headerlink" title="web 的通信方式"></a>web 的通信方式</h3><p>　　浏览器和我们桌面应用的工作方式是不同的，桌面应用通过socket和远程主机上另外一端的一个进程建立TCP连接，从而达到全双工的即时通信。浏览器是客户端请求服务器，服务器返回结果的模式。浏览器要想实现两个客户端的通信，必然要通过服务器进行信息的转发。例如A要和B通信，则应该是A先把信息发送给IM应用服务器，服务器根据A信息中携带的接收者将它再转发给B，同样B到A也是这种模式，如下所示：<br><img src="/images/191409262329047.png" alt></p>
+<a id="more"></a>
+<h3 id="web-下-IM-特点"><a href="#web-下-IM-特点" class="headerlink" title="web 下 IM 特点"></a>web 下 IM 特点</h3><ul>
+<li>双全工通信：浏览器拉取（pull）服务器数据，服务器推送（push）数据到浏览器；</li>
+<li>低延迟：浏览器A发送给B的信息经过服务器要快速转发给B，同理B的信息也要快速交给A；</li>
+<li>支持跨域：通常客户端浏览器和服务器都是处于网络的不同位置，浏览器本身不允许通过脚本直接访问不同域名下的服务器。</li>
+</ul>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="Ajax-短轮询服务器-polling"><a href="#Ajax-短轮询服务器-polling" class="headerlink" title="Ajax 短轮询服务器(polling)"></a>Ajax 短轮询服务器(polling)</h4><p>　　这是最简单的一种解决方案。<br>　　原理：在客户端通过Ajax的方式的方式每隔一小段时间就发送一个请求到服务器，服务器返回最新数据，然后客户端根据获得的数据来更新界面。<br>　　<strong><em>优点是简单，缺点是对服务器压力较大，浪费带宽流量（通常情况下数据都是没有发生改变的）。</em></strong></p>
+<p>创建一个XHR对象，每2秒就请求服务器一次获取服务器时间并打印出来,客户端Javascript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createXHR</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> XMLHttpRequest !=<span class="string">'undefined'</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> ActiveXObject !=<span class="string">'undefined'</span> )&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="built_in">arguments</span>.callee.activeXString!=<span class="string">"string"</span>)&#123;</span><br><span class="line">            <span class="keyword">var</span> versions=[<span class="string">"MSXML2.XMLHttp.6.0"</span>,<span class="string">"MSXML2.XMLHttp.3.0"</span>, <span class="string">"MSXML2.XMLHttp"</span>],i,len;</span><br><span class="line">            <span class="keyword">for</span>(i=<span class="number">0</span>,len=versions.length;i&lt;len;i++)&#123;</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    <span class="keyword">new</span> ActiveXObject(versions[i]);</span><br><span class="line">                    <span class="built_in">arguments</span>.callee.activeXString=versions[i];</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;<span class="keyword">catch</span>(ex) &#123;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ActiveXObject(<span class="built_in">arguments</span>.callee.activeXString);</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"no xhr object available"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">polling</span>(<span class="params">url,method,data</span>)</span>&#123;</span><br><span class="line">       method=method ||<span class="string">'get'</span>;</span><br><span class="line">       data=data || <span class="literal">null</span>;</span><br><span class="line">       <span class="keyword">var</span> xhr=createXHR();</span><br><span class="line">        xhr.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(xhr.readyState==<span class="number">4</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(xhr.status&gt;=<span class="number">200</span>&amp;&amp;xhr.status&lt;<span class="number">300</span>||xhr.status==<span class="number">304</span>)&#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(xhr.responseText);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(<span class="string">"fail"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        xhr.open(method,url,<span class="literal">true</span>);</span><br><span class="line">        xhr.send(data);</span><br><span class="line">    &#125;</span><br><span class="line">    setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        polling(<span class="string">'http://localhost:8088/time'</span>,<span class="string">'get'</span>);</span><br><span class="line">    &#125;,<span class="number">2000</span>);</span><br></pre></td></tr></table></figure></p>
+<p>服务器NodeJS代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http=<span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server=http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line"><span class="keyword">if</span>(req.url==<span class="string">'/time'</span>)&#123;</span><br><span class="line">    <span class="comment">//res.writeHead(200, &#123;'Content-Type': 'text/plain','Access-Control-Allow-Origin':'http://localhost'&#125;);</span></span><br><span class="line">    res.end(<span class="keyword">new</span> <span class="built_in">Date</span>().toLocaleString());</span><br><span class="line">&#125;;</span><br><span class="line">&#125;).listen(<span class="number">8088</span>,<span class="string">'localhost'</span>);</span><br><span class="line">server.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"客户端连接已经建立"</span>);</span><br><span class="line">&#125;);</span><br><span class="line">server.on(<span class="string">'close'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'服务器被关闭'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：<br><img src="/images/191446187483346.png" alt></p>
+<h4 id="Ajax-长轮询服务器（long-polling）"><a href="#Ajax-长轮询服务器（long-polling）" class="headerlink" title="Ajax 长轮询服务器（long-polling）"></a>Ajax 长轮询服务器（long-polling）</h4><p>　　<code>Ajax长轮询服务器</code>（long-polling），解决 <code>Ajax短轮询服务器</code> 浪费带宽流量的问题。<br>　　原理：客户端发送一个请求到服务器，服务器查看客户端请求的数据是否发生了变化（是否有最新数据），如果发生变化则立即响应返回，否则保持这个连接并定期检查最新数据，直到发生了数据更新或连接超时。同时客户端连接一旦断开，则再次发出请求，这样在相同时间内大大减少了客户端请求服务器的次数。<br>　　<strong><em>优点是节省了带宽流量，缺点是客户端断开服务端还在执行。因为采用的是服务端阻塞方式（死循环，保持响应不返回）。</em></strong></p>
+<p>客户端Javascript代码：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createXHR</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> XMLHttpRequest !=<span class="string">'undefined'</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">typeof</span> ActiveXObject !=<span class="string">'undefined'</span> )&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="built_in">arguments</span>.callee.activeXString!=<span class="string">"string"</span>)&#123;</span><br><span class="line">                <span class="keyword">var</span> versions=[<span class="string">"MSXML2.XMLHttp.6.0"</span>,<span class="string">"MSXML2.XMLHttp.3.0"</span>,</span><br><span class="line">                            <span class="string">"MSXML2.XMLHttp"</span>],</span><br><span class="line">                        i,len;</span><br><span class="line">                <span class="keyword">for</span>(i=<span class="number">0</span>,len=versions.length;i&lt;len;i++)&#123;</span><br><span class="line">                    <span class="keyword">try</span>&#123;</span><br><span class="line">                        <span class="keyword">new</span> ActiveXObject(versions[i]);</span><br><span class="line">                        <span class="built_in">arguments</span>.callee.activeXString=versions[i];</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;<span class="keyword">catch</span>(ex) &#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ActiveXObject(<span class="built_in">arguments</span>.callee.activeXString);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"no xhr object available"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">longPolling</span>(<span class="params">url,method,data</span>)</span>&#123;</span><br><span class="line">        method=method ||<span class="string">'get'</span>;</span><br><span class="line">        data=data || <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">var</span> xhr=createXHR();</span><br><span class="line">        xhr.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(xhr.readyState==<span class="number">4</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(xhr.status&gt;=<span class="number">200</span>&amp;&amp;xhr.status&lt;<span class="number">300</span>||xhr.status==<span class="number">304</span>)&#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(xhr.responseText);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="built_in">console</span>.log(<span class="string">"fail"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                longPolling(url,method,data);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        xhr.open(method,url,<span class="literal">true</span>);</span><br><span class="line">        xhr.send(data);</span><br><span class="line">    &#125;</span><br><span class="line">    longPolling(<span class="string">'http://localhost:8088/time'</span>,<span class="string">'get'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>服务端NodeJS代码：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http=<span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> server=http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url==<span class="string">'/time'</span>)&#123;</span><br><span class="line">        setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            sendData(res);</span><br><span class="line">        &#125;,<span class="number">20000</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;).listen(<span class="number">8088</span>,<span class="string">'localhost'</span>);</span><br><span class="line"><span class="comment">//用随机数模拟数据是否变化</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendData</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> randomNum=<span class="built_in">Math</span>.floor(<span class="number">10</span>*<span class="built_in">Math</span>.random());</span><br><span class="line">    <span class="built_in">console</span>.log(randomNum);</span><br><span class="line">    <span class="keyword">if</span>(randomNum&gt;=<span class="number">0</span>&amp;&amp;randomNum&lt;=<span class="number">5</span>)&#123;</span><br><span class="line">        res.end(<span class="keyword">new</span> <span class="built_in">Date</span>().toLocaleString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　在服务端通过生成一个在1到9之间的随机数来模拟判断数据是否发生了变化，当随机数在0到5之间表示数据发生了变化，直接返回，否则保持连接，每隔2秒再检测。可以看到返回的时间是没有规律的，并且单位时间内返回的响应数相比polling方式较少。<br>结果如下：<br><img src="/images/191504150763288.png" alt></p>
+<p>　　<code>Ajax短轮询服务器</code>和<code>Ajax长轮询服务器</code>都是一次性传输数据，在传输数据较小时没有问题，在数据量较大时可采用<code>http-stream方式</code>。</p>
+<h4 id="http-stream方式"><a href="#http-stream方式" class="headerlink" title="http-stream方式"></a>http-stream方式</h4><p>　　原理：客户端在一次请求中保持和服务端连接不断开，然后服务端源源不断传送数据给客户端，就好比数据流一样，并不是一次性将数据全部发给客户端。它与polling方式的区别在于整个通信过程客户端只发送一次请求，然后服务端保持与客户端的长连接，并利用这个连接在回送数据给客户端。</p>
+<h5 id="基于ajax的http-stream方式"><a href="#基于ajax的http-stream方式" class="headerlink" title="基于ajax的http-stream方式"></a>基于ajax的http-stream方式</h5><p>　　原理：构造一个XHR对象，通过监听它的onreadystatechange事件，当它的readyState为3的时候，获取它的responseText然后进行处理，readyState为3表示数据传送中，整个通信过程还没有结束，所以它还在不断获取服务端发送过来的数据，直到readyState为4的时候才表示数据发送完毕，一次通信过程结束。<br>　　<strong><em>缺点是：不兼容IE</em></strong><br>客户端JavaScript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStreamClient</span>(<span class="params">url,progress,done</span>)</span>&#123;</span><br><span class="line">        <span class="comment">//received为接收到数据的计数器</span></span><br><span class="line">        <span class="keyword">var</span> xhr=<span class="keyword">new</span> XMLHttpRequest(),received=<span class="number">0</span>;</span><br><span class="line">        xhr.open(<span class="string">"get"</span>,url,<span class="literal">true</span>);</span><br><span class="line">        xhr.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">var</span> result;</span><br><span class="line">            <span class="keyword">if</span>(xhr.readyState==<span class="number">3</span>)&#123;</span><br><span class="line">                <span class="comment">//console.log(xhr.responseText);</span></span><br><span class="line">                result=xhr.responseText.substring(received);</span><br><span class="line">                received+=result.length;</span><br><span class="line">                progress(result);</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(xhr.readyState==<span class="number">4</span>)&#123;</span><br><span class="line">                done(xhr.responseText);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        xhr.send(<span class="literal">null</span>);</span><br><span class="line">        <span class="keyword">return</span> xhr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> client=createStreamClient(<span class="string">"http://localhost:8088/stream"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Received:"</span>+data);</span><br><span class="line">    &#125;,<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"Done,the last data is:"</span>+data);</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure></p>
+<p>　　这里由于客户端收到的数据是分段发过来的，所以最好定义一个游标received，来获取最新数据而舍弃之前已经接收到的数据，通过这个游标每次将接收到的最新数据打印出来，并且在通信结束后打印出整个responseText。</p>
+<p>服务端NodeJS代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url == <span class="string">'/stream'</span>)&#123;</span><br><span class="line">        res.setHeader(<span class="string">'content-type'</span>, <span class="string">'multipart/octet-stream'</span>);</span><br><span class="line">        <span class="keyword">var</span> timer=setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            sendRandomData(timer, res);</span><br><span class="line">        &#125;, <span class="number">2000</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;).listen(<span class="number">8088</span>, <span class="string">'localhost'</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendRandomData</span>(<span class="params">timer, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> randomNum = <span class="built_in">Math</span>.floor(<span class="number">10000</span> * <span class="built_in">Math</span>.random());</span><br><span class="line">    <span class="built_in">console</span>.log(randomNum);</span><br><span class="line">    <span class="keyword">if</span>(count++ == <span class="number">10</span>)&#123;</span><br><span class="line">        clearInterval(timer);</span><br><span class="line">        res.end(randomNum.toString());</span><br><span class="line">    &#125;</span><br><span class="line">        res.write(randomNum.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>服务端通过计数器count将数据分十次发送，每次生成一个小于10000的随机数发送给客户端让它进行处理。<br><img src="/images/191541195298304.png" alt></p>
+<h5 id="基于iframe的http-stream方式"><a href="#基于iframe的http-stream方式" class="headerlink" title="基于iframe的http-stream方式"></a>基于iframe的http-stream方式</h5><p>　　原理：由于低版本的IE不允许在XHR的readyState为3的时候获取其responseText属性，为了达到在IE上使用这个技术，又出现了基于iframe的数据流通信方式。具体来讲，就是在浏览器中动态载入一个iframe,让它的src属性指向请求的服务器的URL，实际上就是向服务器发送了一个http请求，然后在浏览器端创建一个处理数据的函数，在服务端通过iframe与浏览器的长连接定时输出数据给客户端，但是这个返回的数据并不是一般的数据，而是一个类似于<script type="\" text javascript\"">parent.process(‘“+randomNum.toString()+”‘)</script>脚本执行的方式，浏览器接收到这个数据就会将它解析成js代码并找到页面上指定的函数去执行，实际上是服务端间接使用自己的数据间接调用了客户端的代码，达到实时更新客户端的目的。<br>　　<strong><em>缺点是：使用iframe请求服务端，服务端保持通信连接没有全部返回之前，浏览器title一直处于加载状态，并且底部也显示正在加载，用户体验不好。</em></strong></p>
+<p>客户端Javascript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">process</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(data);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">var</span> dataStream = <span class="function"><span class="keyword">function</span> (<span class="params">url</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ifr = <span class="built_in">document</span>.createElement(<span class="string">"iframe"</span>),timer;</span><br><span class="line">    ifr.src = url;</span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(ifr);</span><br><span class="line">&#125;;</span><br><span class="line">    dataStream(<span class="string">'http://localhost:8088/htmlfile'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>服务端NodeJS代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url == <span class="string">'/htmlfile'</span>)&#123;</span><br><span class="line">        res.setHeader(<span class="string">'content-type'</span>, <span class="string">'text/html'</span>);</span><br><span class="line">        <span class="keyword">var</span> timer = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            sendRandomData(timer, res);</span><br><span class="line">        &#125;,<span class="number">2000</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;).listen(<span class="number">8088</span>, <span class="string">'localhost'</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendRandomData</span>(<span class="params">timer, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> randomNum = <span class="built_in">Math</span>.floor(<span class="number">10000</span> * <span class="built_in">Math</span>.random());</span><br><span class="line">    <span class="built_in">console</span>.log(randomNum.toString());</span><br><span class="line">    <span class="keyword">if</span>(count++ == <span class="number">10</span>)&#123;</span><br><span class="line">        clearInterval(timer);</span><br><span class="line">        res.end(<span class="string">"&lt;script type=\"text/javascript\"&gt;parent.process('"</span>+randomNum.toString()+<span class="string">"')&lt;/script&gt;"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.write(<span class="string">"&lt;script type=\"text/javascript\"&gt;parent.process('"</span>+randomNum.toString()+<span class="string">"')&lt;/script&gt;"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>客户端简单的把数据打印出来，服务端定时发送随机数给客户端，并调用客户端process函数。<br>在IE5中测试结果如下：<br><img src="/images/191558011238845.png" alt></p>
+<h5 id="基于htmlfile的http-stream方式"><a href="#基于htmlfile的http-stream方式" class="headerlink" title="基于htmlfile的http-stream方式"></a>基于htmlfile的http-stream方式</h5><p>　　iframe的http-stream方式的升级版，解决浏览器title一直处于加载状态，并且底部也显示正在加载的问题。<br>　　原理：在IE中，动态生成一个htmlfile对象，这个对象ActiveX形式的com组件，它实际上就是一个在内存中实现的HTML文档，通过将生成的iframe添加到这个内存中的HTMLfile中，并利用iframe的数据流通信方式达到上面的效果。同时由于HTMLfile对象并不是直接添加到页面上的，所以并没有造成浏览器显示正在加载的现象。<br>客户端JavaScript代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">connect_htmlfile</span>(<span class="params">url, callback</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> transferDoc = <span class="keyword">new</span> ActiveXObject(<span class="string">"htmlfile"</span>);</span><br><span class="line">            transferDoc.open();</span><br><span class="line">            transferDoc.write(</span><br><span class="line">                <span class="string">"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;body&gt;&lt;script  type=\"text/javascript\"&gt;"</span>+</span><br><span class="line">                <span class="string">"document.domain='"</span> + <span class="built_in">document</span>.domain + <span class="string">"';"</span> +</span><br><span class="line">                <span class="string">"&lt;\/script&gt;&lt;\/body&gt;&lt;\/html&gt;"</span>);</span><br><span class="line">            transferDoc.close();</span><br><span class="line">            <span class="keyword">var</span> ifrDiv = transferDoc.createElement(<span class="string">"div"</span>);</span><br><span class="line">            transferDoc.body.appendChild(ifrDiv);</span><br><span class="line">            ifrDiv.innerHTML = <span class="string">"&lt;iframe src='"</span> + url + <span class="string">"'&gt;&lt;\/iframe&gt;"</span>;</span><br><span class="line">            transferDoc.callback=callback;</span><br><span class="line">            setInterval( <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;, <span class="number">10000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">prograss</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">            alert(data);</span><br><span class="line">        &#125;</span><br><span class="line">        connect_htmlfile(<span class="string">'http://localhost:8088/htmlfile'</span>,prograss);</span><br></pre></td></tr></table></figure>
+<p>服务端传送给iframe的是这样子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=\&quot;text/javascript\&quot;&gt;callback.process(&apos;&quot;+randomNum.toString()+&quot;&apos;)&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这样就在iframe流的原有方式下避免了浏览器的加载状态。</p>
+<h3 id="服务端推送事件"><a href="#服务端推送事件" class="headerlink" title="服务端推送事件"></a>服务端推送事件</h3><p>　　HTML5提供了一种新的技术叫做服务器推送事件SSE，它能够实现客户端请求服务端，然后服务端利用与客户端建立的这条通信连接push数据给客户端，客户端接收数据并处理的目的。从独立的角度看，SSE技术提供的是从服务器单向推送数据给浏览器的功能，但是配合浏览器主动请求，实际上就实现了客户端和服务器的双向通信。它的原理是在客户端构造一个eventSource对象，该对象具有readySate属性，分别表示如下：</p>
+<ul>
+<li>0：正在连接到服务器；</li>
+<li>1：打开了连接；</li>
+<li>2：关闭了连接。</li>
+</ul>
+<p>　　同时eventSource对象会保持与服务器的长连接，断开后会自动重连，如果要强制连接可以调用它的close方法。可以它的监听onmessage事件，服务端遵循SSE数据传输的格式给客户端，客户端在onmessage事件触发时就能够接收到数据，从而进行某种处理。</p>
+<p>客户端Javascript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> source=<span class="keyword">new</span> EventSource(<span class="string">'http://localhost:8088/evt'</span>);</span><br><span class="line">    source.addEventListener(<span class="string">'message'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(e.data);</span><br><span class="line">    &#125;, <span class="literal">false</span>);</span><br><span class="line">    source.onopen=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'connected'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    source.onerror=<span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(err);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>服务端：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url == <span class="string">'/evt'</span>)&#123;</span><br><span class="line">        <span class="comment">//res.setHeader('content-type', 'multipart/octet-stream');</span></span><br><span class="line">        res.writeHead(<span class="number">200</span>, &#123; <span class="string">"Content-Type"</span>:<span class="string">"tex"</span> +</span><br><span class="line">            <span class="string">"t/event-stream"</span>, <span class="string">"Cache-Control"</span> : <span class="string">"no-cache"</span>,</span><br><span class="line">            <span class="string">'Access-Control-Allow-Origin'</span> : <span class="string">'*'</span>,</span><br><span class="line">            <span class="string">"Connection"</span> : <span class="string">"keep-alive"</span>&#125;);</span><br><span class="line">        <span class="keyword">var</span> timer = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(++count == <span class="number">10</span>)&#123;</span><br><span class="line">                clearInterval(timer);</span><br><span class="line">                res.end();</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                res.write(<span class="string">'id: '</span> + count + <span class="string">'\n'</span>);</span><br><span class="line">                res.write(<span class="string">"data: "</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().toLocaleString() + <span class="string">'\n\n'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="number">2000</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;).listen(<span class="number">8088</span>,<span class="string">'localhost'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>　　注意这里服务端发送的数据要遵循一定的格式，通常是id:（空格）数据（换行符）data：（空格）数据（两个换行符），如果不遵循这种格式，实际上客户端是会触发error事件的。这里的id是用来标识每次发送的数据的id,是强制要加的。<br>结果如下：<br><img src="/images/191631319359663.png" alt></p>
+<h3 id="跨域的问题"><a href="#跨域的问题" class="headerlink" title="跨域的问题"></a>跨域的问题</h3><h4 id="cors实现跨域"><a href="#cors实现跨域" class="headerlink" title="cors实现跨域"></a>cors实现跨域</h4><p>在服务器请求头添加:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`Access-Control-Allow-Origin&apos;:&apos;*&apos;`</span><br></pre></td></tr></table></figure></p>
+<p>为了安全需要，浏览器的跨域的XHR请求存在限制：</p>
+<ul>
+<li>客户端不能使用setRequestHeader设置自定义头部；</li>
+<li>不能发送和接收cookie；</li>
+<li>调用getAllResponseHeaders()方法总会返回空字符串。</li>
+</ul>
+<p>以上这些措施都是为了安全考虑，防止常见的跨站点脚本攻击（XSS）和跨站点请求伪造（CSRF）。</p>
+<p><strong><em>浏览器兼容性：适用于ff,safari,opera,chrome等非IE浏览器</em></strong></p>
+<p>客户端JavaScript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> polling = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(xhr.readyState == <span class="number">4</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(xhr.status == <span class="number">200</span>)&#123;</span><br><span class="line">                <span class="built_in">console</span>.log(xhr.responseText);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    xhr.open(<span class="string">'get'</span>,<span class="string">'http://localhost:8088/cors'</span>);</span><br><span class="line">    xhr.send(<span class="literal">null</span>);</span><br><span class="line">&#125;;</span><br><span class="line">setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    polling();</span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br></pre></td></tr></table></figure></p>
+<p>服务器NodeJS代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url == <span class="string">'/cors'</span>)&#123;</span><br><span class="line">            res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>,<span class="string">'Access-Control-Allow-Origin'</span>:<span class="string">'http://localhost'</span>&#125;);</span><br><span class="line">            res.end(<span class="keyword">new</span> <span class="built_in">Date</span>().toString());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(req.url == <span class="string">'/jsonp'</span>)&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;).listen(<span class="number">8088</span>, <span class="string">'localhost'</span>);</span><br><span class="line">server.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"客户端连接已经建立"</span>);</span><br><span class="line">&#125;);</span><br><span class="line">server.on(<span class="string">'close'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'服务器被关闭'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="IE浏览器XDR跨域"><a href="#IE浏览器XDR跨域" class="headerlink" title="IE浏览器XDR跨域"></a>IE浏览器XDR跨域</h4><p>对于IE8-10，它是不支持使用原生的XHR对象请求跨域服务器的，它自己实现了一个XDomainRequest对象，类似于XHR对象，能够发送跨域请求，它主要有以下限制：</p>
+<ul>
+<li>cookie不会随请求发送，也不会随响应返回；</li>
+<li>只能设置请求头部信息中的Content-Type字段；</li>
+<li>不能访问响应头部信息；</li>
+<li>只支持Get和Post请求；</li>
+<li>只支持IE8-IE10；</li>
+</ul>
+<p>客户端JavaScript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> polling = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> xdr = <span class="keyword">new</span> XDomainRequest();</span><br><span class="line">    xdr.onload=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(xdr.responseText);</span><br><span class="line">    &#125;;</span><br><span class="line">    xdr.onerror=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'failed'</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    xdr.open(<span class="string">'get'</span>,<span class="string">'http://localhost:8088/cors'</span>);</span><br><span class="line">    xdr.send(<span class="literal">null</span>);</span><br><span class="line">&#125;;</span><br><span class="line">setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    polling();</span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br></pre></td></tr></table></figure></p>
+<p>服务器NodeJS代码同上( <code>CORS实现跨域</code> )。</p>
+<h4 id="Jsonp的跨域"><a href="#Jsonp的跨域" class="headerlink" title="Jsonp的跨域"></a>Jsonp的跨域</h4><p>　　原理：利用HTML页面上script标签对跨域没有限制的特点，让它的src属性指向服务端请求的地址，其实是通过script标签发送了一个http请求，服务器接收到这个请求之后，返回的数据是自己的数据加上对客户端JS函数的调用。</p>
+<p>客户端JavaScript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"获得的跨域数据为:"</span>+data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sendJsonp</span>(<span class="params">url</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> oScript=<span class="built_in">document</span>.createElement(<span class="string">"script"</span>);</span><br><span class="line">    oScript.src=url;</span><br><span class="line">    oScript.setAttribute(<span class="string">'type'</span>,<span class="string">"text/javascript"</span>);</span><br><span class="line">    <span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[<span class="number">0</span>].appendChild(oScript);</span><br><span class="line">&#125;</span><br><span class="line">setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    sendJsonp(<span class="string">'http://localhost:8088/jsonp?cb=callback'</span>);</span><br><span class="line">&#125;,<span class="number">1000</span>);</span><br></pre></td></tr></table></figure></p>
+<p>服务器NodeJS代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="regexp">/\/jsonp/</span>.test(req.url))&#123;</span><br><span class="line">        <span class="keyword">var</span> urlData = url.parse(req.url, <span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">var</span> methodName = urlData.query.cb;</span><br><span class="line">        res.writeHead(<span class="number">200</span>,&#123;<span class="string">'Content-Type'</span>:<span class="string">'application/javascript'</span>&#125;);</span><br><span class="line">        <span class="comment">//res.end("&lt;script type=\"text/javascript\"&gt;"+methodName+"("+new Date().getTime()+");&lt;/script&gt;");</span></span><br><span class="line">        res.end(methodName+<span class="string">"("</span>+<span class="keyword">new</span> <span class="built_in">Date</span>().getTime()+<span class="string">");"</span>);</span><br><span class="line">        <span class="comment">//res.end(new Date().toString());</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;).listen(<span class="number">8088</span>,<span class="string">'localhost'</span>);</span><br><span class="line">server.on(<span class="string">'connection'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">socket</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"客户端连接已经建立"</span>);</span><br><span class="line">&#125;);</span><br><span class="line">server.on(<span class="string">'close'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'服务器被关闭'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="websocket实现"><a href="#websocket实现" class="headerlink" title="websocket实现"></a>websocket实现</h3><p>　　以上方案通常称为hack技术。<br>　　在HTML5中，浏览器为我们提供了websocket技术，支持H5浏览器的首选方案。<br>websocket整个工作过程：<br>　　首先是客户端new 一个websocket对象，该对象会发送一个http请求到服务端，服务端发现这是个webscoket请求，会同意协议转换，发送回客户端一个101状态码的response，以上过程称之为一次握手，经过这次握手之后，客户端就和服务端建立了一条TCP连接，应用层使用wss协议,在该连接上，服务端和客户端就可以进行双向通信了。</p>
+<p>　　wss协议数据格式：<br><img src="/images/191724033739549.png" alt><br>　　<code>FIN字段</code>，它占用1位，表示这是一个数据帧的结束标志，同时也下一个数据帧的开始标志。<br>　　<code>opcode字段</code>，它占用4位，当为1时，表示传递的是text帧，2表示二进制数据帧，8表示需要结束此次通信（就是客户端或者服务端哪个发送给对方这个字段，就表示对方要关闭连接了）。9表示发送的是一个ping数据。<br>　　<code>mask字段</code>占用1位，为1表示masking-key字段可用，<br>　　<code>masking-key字段</code>是用来对客户端发送来的数据做unmask操作的。它占用0到4个字节。<br>　　<code>Payload字段</code>表示实际发送的数据，可以是字符数据也可以是二进制数据。</p>
+<p>客户端JavaScript代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">"ws://127.0.0.1:8088"</span>);</span><br><span class="line">    <span class="keyword">var</span> oText = <span class="built_in">document</span>.getElementById(<span class="string">'message'</span>);</span><br><span class="line">    <span class="keyword">var</span> oSend = <span class="built_in">document</span>.getElementById(<span class="string">'send'</span>);</span><br><span class="line">    <span class="keyword">var</span> oClose = <span class="built_in">document</span>.getElementById(<span class="string">'close'</span>);</span><br><span class="line">    <span class="keyword">var</span> oUl = <span class="built_in">document</span>.getElementsByTagName(<span class="string">'ul'</span>)[<span class="number">0</span>];</span><br><span class="line">    ws.onopen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        oSend.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="regexp">/^\s*$/</span>.test(oText.value))&#123;</span><br><span class="line">                ws.send(oText.value);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">    ws.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>)</span>&#123;</span><br><span class="line">      <span class="keyword">var</span> str = <span class="string">"&lt;li&gt;"</span>+msg.data+<span class="string">"&lt;/li&gt;"</span>;</span><br><span class="line">      oUl.innerHTML += str;</span><br><span class="line">    &#125;;</span><br><span class="line">    ws.onclose=<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"已断开与服务器的连接"</span>);</span><br><span class="line">        ws.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　客户端创建一个websocket对象，在onopen时间触发之后（握手成功后），给页面上的button指定一个事件，用来发送页面input当中的信息，服务端接收到信息打印出来，并组装成帧返回给日客户端，客户端再append到页面上。</p>
+<p>服务端NodeJS代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//握手成功之后就可以发送数据了</span></span><br><span class="line"><span class="keyword">var</span> crypto = <span class="built_in">require</span>(<span class="string">'crypto'</span>);</span><br><span class="line"><span class="keyword">var</span> WS = <span class="string">'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'</span>;</span><br><span class="line"><span class="keyword">var</span> server = <span class="built_in">require</span>(<span class="string">'net'</span>).createServer(<span class="function"><span class="keyword">function</span> (<span class="params">socket</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> key;</span><br><span class="line">    socket.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">msg</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!key) &#123;</span><br><span class="line">            <span class="comment">// 第一次握手，响应头发送101状态码并更新协议</span></span><br><span class="line">            <span class="comment">//获取发送过来的Sec-WebSocket-key首部</span></span><br><span class="line">            key = msg.toString().match(<span class="regexp">/Sec-WebSocket-Key: (.+)/</span>)[<span class="number">1</span>];</span><br><span class="line">            key = crypto.createHash(<span class="string">'sha1'</span>).update(key + WS).digest(<span class="string">'base64'</span>);</span><br><span class="line">            socket.write(<span class="string">'HTTP/1.1 101 Switching Protocols\r\n'</span>);</span><br><span class="line">            socket.write(<span class="string">'Upgrade: WebSocket\r\n'</span>);</span><br><span class="line">            socket.write(<span class="string">'Connection: Upgrade\r\n'</span>);</span><br><span class="line">            <span class="comment">//将确认后的key发送回去</span></span><br><span class="line">            socket.write(<span class="string">'Sec-WebSocket-Accept: '</span> + key + <span class="string">'\r\n'</span>);</span><br><span class="line">            <span class="comment">//输出空行，结束Http头</span></span><br><span class="line">            socket.write(<span class="string">'\r\n'</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 按wss协议解码数据</span></span><br><span class="line">            <span class="keyword">var</span> msg = decodeData(msg);</span><br><span class="line">            <span class="built_in">console</span>.log(msg);</span><br><span class="line">            <span class="comment">//如果客户端发送的操作码为8,表示断开连接,关闭TCP连接并退出应用程序</span></span><br><span class="line">            <span class="keyword">if</span>(msg.Opcode == <span class="number">8</span>)&#123;</span><br><span class="line">                socket.end();</span><br><span class="line">                server.unref();</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            	<span class="comment">// 按wss协议编码数据</span></span><br><span class="line">                socket.write(encodeData(&#123;<span class="attr">FIN</span>:<span class="number">1</span>,</span><br><span class="line">                    Opcode:<span class="number">1</span>,</span><br><span class="line">                    PayloadData:<span class="string">"接受到的数据为"</span>+msg.PayloadData&#125;));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">    server.listen(<span class="number">8000</span>,<span class="string">'localhost'</span>);</span><br><span class="line"><span class="comment">//按照websocket数据帧格式提取数据</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">decodeData</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,j,s,frame = &#123;</span><br><span class="line">        <span class="comment">//解析前两个字节的基本数据</span></span><br><span class="line">        FIN:e[i] &gt;&gt; <span class="number">7</span>,</span><br><span class="line">        Opcode : e[i++] &amp; <span class="number">15</span>,</span><br><span class="line">        Mask : e[i] &gt;&gt; <span class="number">7</span>,</span><br><span class="line">        PayloadLength : e[i++]&amp;<span class="number">0x7F</span></span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">//处理特殊长度126和127</span></span><br><span class="line">    <span class="keyword">if</span>(frame.PayloadLength == <span class="number">126</span>)</span><br><span class="line">        frame.length = (e[i++] &lt;&lt; <span class="number">8</span>) + e[i++];</span><br><span class="line">    <span class="keyword">if</span>(frame.PayloadLength == <span class="number">127</span>)</span><br><span class="line">        i+=<span class="number">4</span>, <span class="comment">//长度一般用四字节的整型，前四个字节通常为长整形留空的</span></span><br><span class="line">            frame.length=(e[i++] &lt;&lt; <span class="number">24</span>) + (e[i++] &lt;&lt; <span class="number">16</span>) + (e[i++] &lt;&lt; <span class="number">8</span>) + e[i++];</span><br><span class="line">    <span class="comment">//判断是否使用掩码</span></span><br><span class="line">    <span class="keyword">if</span>(frame.Mask)&#123;</span><br><span class="line">        <span class="comment">//获取掩码实体</span></span><br><span class="line">        frame.MaskingKey = [e[i++], e[i++], e[i++], e[i++]];</span><br><span class="line">        <span class="comment">//对数据和掩码做异或运算</span></span><br><span class="line">        <span class="keyword">for</span>( j=<span class="number">0</span>, s=[]; j&lt;frame.PayloadLength; j++ )</span><br><span class="line">            s.push(e[i+j]^frame.MaskingKey[j%<span class="number">4</span>]);</span><br><span class="line">    &#125;<span class="keyword">else</span> s = e.slice(i,frame.PayloadLength); <span class="comment">//否则直接使用数据</span></span><br><span class="line">    <span class="comment">//数组转换成缓冲区来使用</span></span><br><span class="line">    s = <span class="keyword">new</span> Buffer(s);</span><br><span class="line">    <span class="comment">//如果有必要则把缓冲区转换成字符串来使用</span></span><br><span class="line">    <span class="keyword">if</span>(frame.Opcode == <span class="number">1</span>)s = s.toString();</span><br><span class="line">    <span class="comment">//设置上数据部分</span></span><br><span class="line">    frame.PayloadData = s;</span><br><span class="line">    <span class="comment">//返回数据帧</span></span><br><span class="line">    <span class="keyword">return</span> frame;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//对发送数据进行编码</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">encodeData</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> s = [],o = <span class="keyword">new</span> Buffer(e.PayloadData),l = o.length;</span><br><span class="line">    <span class="comment">//输入第一个字节</span></span><br><span class="line">    s.push((e.FIN &lt;&lt; <span class="number">7</span>) + e.Opcode);</span><br><span class="line">    <span class="comment">//输入第二个字节，判断它的长度并放入相应的后续长度消息</span></span><br><span class="line">    <span class="comment">//永远不使用掩码</span></span><br><span class="line">    <span class="keyword">if</span>(l &lt; <span class="number">126</span>)  s.push(l);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(l &lt; <span class="number">0x10000</span>) s.push(<span class="number">126</span>,(l&amp;<span class="number">0xFF00</span>) &gt;&gt; <span class="number">2</span>,l &amp; <span class="number">0xFF</span>);</span><br><span class="line">    <span class="keyword">else</span> s.push(</span><br><span class="line">            <span class="number">127</span>, <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>, <span class="comment">//8字节数据，前4字节一般没用留空</span></span><br><span class="line">                (l &amp; <span class="number">0xFF000000</span>) &gt;&gt; <span class="number">6</span>,(l &amp; <span class="number">0xFF0000</span>) &gt;&gt; <span class="number">4</span>,( l &amp; <span class="number">0xFF00</span>) &gt;&gt; <span class="number">2</span>,l &amp; <span class="number">0xFF</span></span><br><span class="line">        );</span><br><span class="line">    <span class="comment">//返回头部分和数据部分的合并缓冲区</span></span><br><span class="line">    <span class="keyword">return</span> Buffer.concat([<span class="keyword">new</span> Buffer(s),o]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果如下：<br>浏览器:<br><img src="/images/191754118102961.png" alt><br>服务器:<br><img src="/images/191754557634399.png" alt></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>　　在实际开发中，推荐选用成熟的实时通讯库（比如socket.io,sockjs,swoole,workerman），他们的原理就是将上面（还有一些其他的如基于Flash的push）的一些技术进行了在客户端和服务端的封装，然后给开发者一个统一调用的接口。在支持websocket的环境下使用websocket，在不支持它的时候启用上面所讲的一些hack技术。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IM/" rel="tag"># IM</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/19/sql-query-differential/" rel="next" title="MySQL查询：获取两个表的差集">
+                <i class="fa fa-chevron-left"></i> MySQL查询：获取两个表的差集
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/27/aly-virtual-host/" rel="prev" title="阿里云虚拟主机配置子域名指向子目录">
+                阿里云虚拟主机配置子域名指向子目录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Jeskinfly">
+          <p class="site-author-name" itemprop="name">Jeskinfly</p>
+           
+              <p class="site-description motion-element" itemprop="description">Jeskinfly's blog</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jeskinfly" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-的通信方式"><span class="nav-number">1.</span> <span class="nav-text">web 的通信方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-下-IM-特点"><span class="nav-number">2.</span> <span class="nav-text">web 下 IM 特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ajax-短轮询服务器-polling"><span class="nav-number">3.1.</span> <span class="nav-text">Ajax 短轮询服务器(polling)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ajax-长轮询服务器（long-polling）"><span class="nav-number">3.2.</span> <span class="nav-text">Ajax 长轮询服务器（long-polling）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#http-stream方式"><span class="nav-number">3.3.</span> <span class="nav-text">http-stream方式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#基于ajax的http-stream方式"><span class="nav-number">3.3.1.</span> <span class="nav-text">基于ajax的http-stream方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于iframe的http-stream方式"><span class="nav-number">3.3.2.</span> <span class="nav-text">基于iframe的http-stream方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#基于htmlfile的http-stream方式"><span class="nav-number">3.3.3.</span> <span class="nav-text">基于htmlfile的http-stream方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务端推送事件"><span class="nav-number">4.</span> <span class="nav-text">服务端推送事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨域的问题"><span class="nav-number">5.</span> <span class="nav-text">跨域的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#cors实现跨域"><span class="nav-number">5.1.</span> <span class="nav-text">cors实现跨域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IE浏览器XDR跨域"><span class="nav-number">5.2.</span> <span class="nav-text">IE浏览器XDR跨域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Jsonp的跨域"><span class="nav-number">5.3.</span> <span class="nav-text">Jsonp的跨域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#websocket实现"><span class="nav-number">6.</span> <span class="nav-text">websocket实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jeskinfly</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("NgrincGO5vNowsOLnXvEQhGl-gzGzoHsz", "kl25hoEbMW7A45RI4vdx2l1U");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
